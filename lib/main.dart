@@ -29,8 +29,13 @@ Future<void> main() async {
       debugPrint('Falha de inicialização Supabase: $error');
     }
   }
-  runApp(ChangeNotifierProvider(
-    create: (_) => AppController(client: client, startupError: startupError),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => ThemeController()),
+      ChangeNotifierProvider(
+          create: (_) =>
+              AppController(client: client, startupError: startupError)),
+    ],
     child: const FliperamadaApp(),
   ));
 }
@@ -38,17 +43,20 @@ Future<void> main() async {
 class FliperamadaApp extends StatelessWidget {
   const FliperamadaApp({super.key});
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        title: 'Fliperamada TI',
-        debugShowCheckedModeBanner: false,
-        locale: const Locale('pt', 'BR'),
-        supportedLocales: const [Locale('pt', 'BR')],
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        theme: ArcadeTheme.dark,
-        home: const AppRoot(),
-      );
+  Widget build(BuildContext context) => Consumer<ThemeController>(
+      builder: (context, theme, _) => MaterialApp(
+            title: 'Fliperamada TI',
+            debugShowCheckedModeBanner: false,
+            locale: const Locale('pt', 'BR'),
+            supportedLocales: const [Locale('pt', 'BR')],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            theme: ArcadeTheme.light,
+            darkTheme: ArcadeTheme.dark,
+            themeMode: theme.mode,
+            home: const AppRoot(),
+          ));
 }

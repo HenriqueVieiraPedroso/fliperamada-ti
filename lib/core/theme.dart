@@ -88,6 +88,84 @@ class ArcadeTheme {
         ),
         dividerColor: ArcadeColors.divider,
       );
+
+  static ThemeData get light => ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xFFF4F7FC),
+        colorScheme: const ColorScheme.light(
+          primary: Color(0xFF007D91),
+          secondary: Color(0xFFC21868),
+          tertiary: Color(0xFF4E7800),
+          surface: Colors.white,
+          error: Color(0xFFBA1A1A),
+        ),
+        fontFamily: 'Inter',
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(
+              fontFamily: 'SpaceGrotesk',
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF172033)),
+          displayMedium: TextStyle(
+              fontFamily: 'SpaceGrotesk',
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF172033)),
+          headlineLarge: TextStyle(
+              fontFamily: 'SpaceGrotesk',
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF172033)),
+          headlineMedium: TextStyle(
+              fontFamily: 'SpaceGrotesk',
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF172033)),
+          titleLarge: TextStyle(
+              fontFamily: 'SpaceGrotesk',
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF172033)),
+          bodyLarge: TextStyle(fontFamily: 'Inter', color: Color(0xFF172033)),
+          bodyMedium: TextStyle(fontFamily: 'Inter', color: Color(0xFF172033)),
+          labelLarge:
+              TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: const Color(0xFFF7F9FD),
+          hintStyle: const TextStyle(color: Color(0xFF68738A), fontSize: 13),
+          labelStyle: const TextStyle(color: Color(0xFF68738A)),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: Color(0xFFD5DCE8))),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: Color(0xFFD5DCE8))),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide:
+                  const BorderSide(color: Color(0xFF007D91), width: 1.2)),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: Color(0xFFBA1A1A))),
+        ),
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: const Color(0xFF172033),
+          contentTextStyle: const TextStyle(color: Colors.white),
+          behavior: SnackBarBehavior.floating,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+        dividerColor: const Color(0xFFD5DCE8),
+      );
+}
+
+class ThemeController extends ChangeNotifier {
+  bool isDark = true;
+  ThemeMode get mode => isDark ? ThemeMode.dark : ThemeMode.light;
+  void toggle() {
+    isDark = !isDark;
+    notifyListeners();
+  }
 }
 
 class GlassCard extends StatefulWidget {

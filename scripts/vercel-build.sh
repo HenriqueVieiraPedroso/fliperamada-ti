@@ -5,6 +5,9 @@ cd "$ROOT_DIR"
 FLUTTER_ROOT="$(bash scripts/install_flutter.sh)"
 export FLUTTER_ROOT
 export PATH="$FLUTTER_ROOT/bin:$PATH"
+# A Vercel pode extrair o SDK com proprietário diferente do processo do build.
+# O Flutter consulta o Git internamente; registrar o SDK evita o erro 128
+# "detected dubious ownership in repository".
 git config --global --add safe.directory "$FLUTTER_ROOT"
 flutter config --enable-web >/dev/null
 flutter pub get

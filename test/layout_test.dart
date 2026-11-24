@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:fliperamada_ti/main.dart';
+import 'package:fliperamada_ti/core/theme.dart';
 import 'package:fliperamada_ti/data/app_controller.dart';
 import 'package:fliperamada_ti/models/domain.dart';
 
@@ -26,14 +27,18 @@ void main() {
       };
       addTearDown(() => FlutterError.onError = previousErrorHandler);
       final app = AppController(client: null);
-      await tester.pumpWidget(ChangeNotifierProvider.value(
-          value: app, child: const FliperamadaApp()));
+      await tester.pumpWidget(MultiProvider(providers: [
+        ChangeNotifierProvider.value(value: app),
+        ChangeNotifierProvider(create: (_) => ThemeController()),
+      ], child: const FliperamadaApp()));
       await tester.pump(const Duration(seconds: 1));
       expect(tester.takeException(), isNull, reason: 'Login ${size.width}');
       await tester.tap(find.text('EXPLORAR DEMONSTRAÇÃO'));
       await tester.pump();
-      await tester.pumpWidget(ChangeNotifierProvider.value(
-          value: app, child: const FliperamadaApp()));
+      await tester.pumpWidget(MultiProvider(providers: [
+        ChangeNotifierProvider.value(value: app),
+        ChangeNotifierProvider(create: (_) => ThemeController()),
+      ], child: const FliperamadaApp()));
       for (final section in AppSection.values) {
         app.navigate(section);
         await tester.pump();

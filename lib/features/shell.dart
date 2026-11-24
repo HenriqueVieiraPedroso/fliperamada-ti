@@ -284,11 +284,47 @@ class _TopBar extends StatelessWidget {
                 const SizedBox(width: 17),
               ],
               PopupMenuButton<String>(
+                tooltip: context.watch<ThemeController>().isDark
+                    ? 'Ativar tema claro'
+                    : 'Ativar tema escuro',
+                onSelected: (value) {
+                  if (value == 'theme') {
+                    context.read<ThemeController>().toggle();
+                  }
+                  if (value == 'logout') {
+                    onLogout();
+                  }
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem<String>(
+                    value: 'theme',
+                    child: Row(children: [
+                      Icon(context.watch<ThemeController>().isDark
+                          ? Icons.light_mode_outlined
+                          : Icons.dark_mode_outlined),
+                      const SizedBox(width: 9),
+                      Text(context.watch<ThemeController>().isDark
+                          ? 'Usar tema claro'
+                          : 'Usar tema escuro'),
+                    ]),
+                  ),
+                ],
+                child: IconButton(
+                  tooltip: context.watch<ThemeController>().isDark
+                      ? 'Tema claro'
+                      : 'Tema escuro',
+                  onPressed: context.read<ThemeController>().toggle,
+                  icon: Icon(context.watch<ThemeController>().isDark
+                      ? Icons.light_mode_outlined
+                      : Icons.dark_mode_outlined),
+                ),
+              ),
+              PopupMenuButton<String>(
                 tooltip: 'Perfil e sessão',
                 onSelected: (value) {
                   if (value == 'logout') onLogout();
                 },
-                color: const Color(0xFF1A1B35),
+                color: Theme.of(context).colorScheme.surface,
                 itemBuilder: (context) => [
                   PopupMenuItem<String>(
                       enabled: false,
@@ -430,9 +466,9 @@ class _SideRail extends StatelessWidget {
   Widget build(BuildContext context) => AnimatedContainer(
       duration: const Duration(milliseconds: 230),
       width: expanded ? 226 : 82,
-      decoration: const BoxDecoration(
-          color: Color(0xFF0E1025),
-          border: Border(right: BorderSide(color: ArcadeColors.divider))),
+      decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          border: const Border(right: BorderSide(color: ArcadeColors.divider))),
       child: Column(children: [
         Padding(
             padding: EdgeInsets.fromLTRB(
@@ -604,14 +640,14 @@ class _MobileNav extends StatelessWidget {
     final extra = sections.skip(4).toList();
     final selectedInExtra = extra.contains(selected);
     return Container(
-        decoration: const BoxDecoration(
-            color: Color(0xFF0E1025),
-            border: Border(top: BorderSide(color: ArcadeColors.divider))),
+        decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            border: const Border(top: BorderSide(color: ArcadeColors.divider))),
         child: SafeArea(
             top: false,
             child: NavigationBar(
               height: 65,
-              backgroundColor: const Color(0xFF0E1025),
+              backgroundColor: Theme.of(context).colorScheme.surface,
               surfaceTintColor: Colors.transparent,
               indicatorColor: ArcadeColors.cyan.withValues(alpha: .1),
               selectedIndex:
@@ -623,7 +659,7 @@ class _MobileNav extends StatelessWidget {
                 }
                 showModalBottomSheet<void>(
                     context: context,
-                    backgroundColor: const Color(0xFF17182E),
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     builder: (context) => SafeArea(
                         child: Padding(
                             padding: const EdgeInsets.all(18),
