@@ -5,6 +5,7 @@ cd "$ROOT_DIR"
 FLUTTER_ROOT="$(bash scripts/install_flutter.sh)"
 export FLUTTER_ROOT
 export PATH="$FLUTTER_ROOT/bin:$PATH"
+git config --global --add safe.directory "$FLUTTER_ROOT"
 flutter config --enable-web >/dev/null
 flutter pub get
 flutter build web --release \
