@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Fliperamada TI: gestão arcade de vendas, caixa, estoque, máquinas e equipe.">
+  <meta name="theme-color" content="#0A0B1E">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Fliperamada TI">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="manifest.json">
+  <title>Fliperamada TI — ERP Arcade</title>
+  <style>
+    html,body{margin:0;background:#0A0B1E;color:#eaeaf4;min-height:100%;font-family:Arial,sans-serif}
+    #boot{position:fixed;inset:0;display:grid;place-content:center;text-align:center;gap:14px}
+    #boot strong{font-size:22px;letter-spacing:3px;color:#00F0FF}
+    #boot span{font-size:12px;color:#a7a9c2}
+    .spinner{width:28px;height:28px;border:2px solid #24253e;border-top-color:#00F0FF;border-radius:50%;margin:auto;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media(prefers-reduced-motion:reduce){.spinner{animation:none}}
+  </style>
+</head>
+<body>
+  <div id="boot"><div class="spinner"></div><strong>FLIPERAMADA TI</strong><span>Carregando a arena…</span></div>
+  <noscript>Ative o JavaScript para acessar o Fliperamada TI.</noscript>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
