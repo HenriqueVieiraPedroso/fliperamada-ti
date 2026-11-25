@@ -198,6 +198,7 @@ class _GlassCardState extends State<GlassCard> {
 
   @override
   Widget build(BuildContext context) {
+    final light = Theme.of(context).brightness == Brightness.light;
     final radius = BorderRadius.circular(widget.borderRadius);
     final glowColor = widget.glow ?? ArcadeColors.cyan;
     final entranceDuration = MediaQuery.disableAnimationsOf(context)
@@ -218,10 +219,12 @@ class _GlassCardState extends State<GlassCard> {
         decoration: BoxDecoration(
           borderRadius: radius,
           border: Border.all(
-              color: (widget.glow ?? Colors.white).withValues(
-                  alpha: widget.glow == null
-                      ? (_hovered ? .14 : .075)
-                      : (_hovered ? .32 : .22))),
+              color: light
+                  ? const Color(0xFFD0D5DD)
+                  : (widget.glow ?? Colors.white).withValues(
+                      alpha: widget.glow == null
+                          ? (_hovered ? .14 : .075)
+                          : (_hovered ? .32 : .22))),
           boxShadow: widget.glow == null && !_hovered
               ? const []
               : [
@@ -236,7 +239,8 @@ class _GlassCardState extends State<GlassCard> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Material(
-              color: Colors.white.withValues(alpha: .045),
+              color:
+                  light ? Colors.white : Colors.white.withValues(alpha: .045),
               child: InkWell(
                 onTap: widget.onTap,
                 onHover: (hovering) {
@@ -274,9 +278,12 @@ class NeonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final light = Theme.of(context).brightness == Brightness.light;
     final colors = danger
         ? const [ArcadeColors.red, Color(0xFFFF2E68)]
-        : const [ArcadeColors.cyan, ArcadeColors.purple];
+        : light
+            ? const [Color(0xFF1769E0), Color(0xFF0B5BD3)]
+            : const [ArcadeColors.cyan, ArcadeColors.purple];
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: colors),

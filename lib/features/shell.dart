@@ -236,6 +236,7 @@ class _TopBar extends StatelessWidget {
       Consumer<AppController>(builder: (context, app, _) {
         final compact = MediaQuery.sizeOf(context).width < 620;
         final user = app.user!;
+        final light = Theme.of(context).brightness == Brightness.light;
         return Container(
             height: 72,
             padding: EdgeInsets.symmetric(horizontal: compact ? 16 : 26),
@@ -254,9 +255,14 @@ class _TopBar extends StatelessWidget {
                       height: 38,
                       constraints: const BoxConstraints(maxWidth: 360),
                       decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: .035),
+                          color: light
+                              ? Colors.white
+                              : Colors.white.withValues(alpha: .035),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: ArcadeColors.divider)),
+                          border: Border.all(
+                              color: light
+                                  ? const Color(0xFFD0D5DD)
+                                  : ArcadeColors.divider)),
                       child: TextField(
                           controller: search,
                           onSubmitted: (_) => onSearch(),
@@ -463,99 +469,111 @@ class _SideRail extends StatelessWidget {
   final AppSection selected;
   final ValueChanged<AppSection> onSelect;
   @override
-  Widget build(BuildContext context) => AnimatedContainer(
-      duration: const Duration(milliseconds: 230),
-      width: expanded ? 226 : 82,
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          border: const Border(right: BorderSide(color: ArcadeColors.divider))),
-      child: Column(children: [
-        Padding(
-            padding: EdgeInsets.fromLTRB(
-                expanded ? 18 : 0, 23, expanded ? 18 : 0, 26),
-            child: Row(
-                mainAxisAlignment: expanded
-                    ? MainAxisAlignment.start
-                    : MainAxisAlignment.center,
-                children: [
-                  Container(
-                      width: 39,
-                      height: 39,
+  Widget build(BuildContext context) {
+    final light = Theme.of(context).brightness == Brightness.light;
+    return AnimatedContainer(
+        duration: const Duration(milliseconds: 230),
+        width: expanded ? 226 : 82,
+        decoration: BoxDecoration(
+            color: light
+                ? const Color(0xFF172033)
+                : Theme.of(context).colorScheme.surface,
+            border: Border(
+                right: BorderSide(
+                    color: light
+                        ? const Color(0xFF2D3A50)
+                        : ArcadeColors.divider))),
+        child: Column(children: [
+          Padding(
+              padding: EdgeInsets.fromLTRB(
+                  expanded ? 18 : 0, 23, expanded ? 18 : 0, 26),
+              child: Row(
+                  mainAxisAlignment: expanded
+                      ? MainAxisAlignment.start
+                      : MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        width: 39,
+                        height: 39,
+                        decoration: BoxDecoration(
+                            color: ArcadeColors.cyan.withValues(alpha: .1),
+                            borderRadius: BorderRadius.circular(13),
+                            border: Border.all(
+                                color:
+                                    ArcadeColors.cyan.withValues(alpha: .22))),
+                        child: const Icon(Icons.sports_esports_rounded,
+                            color: ArcadeColors.cyan, size: 20)),
+                    if (expanded) ...[
+                      const SizedBox(width: 10),
+                      Expanded(
+                          child: Text('FLIPERAMADA\nTI / ARCADE',
+                              style: TextStyle(
+                                  fontFamily: 'PressStart2P',
+                                  color: light
+                                      ? Colors.white
+                                      : Theme.of(context).colorScheme.onSurface,
+                                  fontSize: 8,
+                                  height: 1.8)))
+                    ],
+                  ])),
+          if (expanded)
+            const Padding(
+                padding: EdgeInsets.fromLTRB(19, 0, 14, 12),
+                child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('MENU PRINCIPAL',
+                        style: TextStyle(
+                            color: ArcadeColors.muted,
+                            fontSize: 8,
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.w800)))),
+          Expanded(
+              child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: expanded ? 10 : 13),
+                  children: sections
+                      .map((section) => _NavTile(
+                          section: section,
+                          selected: section == selected,
+                          expanded: expanded,
+                          onTap: () => onSelect(section)))
+                      .toList())),
+          Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: expanded ? 14 : 0, vertical: 8),
+              child: expanded
+                  ? Container(
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                          color: ArcadeColors.cyan.withValues(alpha: .1),
+                          color: ArcadeColors.cyan.withValues(alpha: .045),
                           borderRadius: BorderRadius.circular(13),
                           border: Border.all(
-                              color: ArcadeColors.cyan.withValues(alpha: .22))),
-                      child: const Icon(Icons.sports_esports_rounded,
-                          color: ArcadeColors.cyan, size: 20)),
-                  if (expanded) ...[
-                    const SizedBox(width: 10),
-                    Expanded(
-                        child: Text('FLIPERAMADA\nTI / ARCADE',
+                              color: ArcadeColors.cyan.withValues(alpha: .12))),
+                      child: const Row(children: [
+                        Icon(Icons.bolt_rounded,
+                            size: 15, color: ArcadeColors.cyan),
+                        SizedBox(width: 8),
+                        Text('SISTEMA ONLINE',
                             style: TextStyle(
-                                fontFamily: 'PressStart2P',
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: ArcadeColors.cyan,
                                 fontSize: 8,
-                                height: 1.8)))
-                  ],
-                ])),
-        if (expanded)
-          const Padding(
-              padding: EdgeInsets.fromLTRB(19, 0, 14, 12),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('MENU PRINCIPAL',
-                      style: TextStyle(
-                          color: ArcadeColors.muted,
-                          fontSize: 8,
-                          letterSpacing: 1.2,
-                          fontWeight: FontWeight.w800)))),
-        Expanded(
-            child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: expanded ? 10 : 13),
-                children: sections
-                    .map((section) => _NavTile(
-                        section: section,
-                        selected: section == selected,
-                        expanded: expanded,
-                        onTap: () => onSelect(section)))
-                    .toList())),
-        Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: expanded ? 14 : 0, vertical: 8),
-            child: expanded
-                ? Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        color: ArcadeColors.cyan.withValues(alpha: .045),
-                        borderRadius: BorderRadius.circular(13),
-                        border: Border.all(
-                            color: ArcadeColors.cyan.withValues(alpha: .12))),
-                    child: const Row(children: [
-                      Icon(Icons.bolt_rounded,
-                          size: 15, color: ArcadeColors.cyan),
-                      SizedBox(width: 8),
-                      Text('SISTEMA ONLINE',
-                          style: TextStyle(
-                              color: ArcadeColors.cyan,
-                              fontSize: 8,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: .5))
-                    ]))
-                : const Icon(Icons.bolt_rounded,
-                    size: 17, color: ArcadeColors.cyan)),
-        const SizedBox(height: 10),
-        IconButton(
-            onPressed: onToggle,
-            tooltip: expanded ? 'Recolher menu' : 'Expandir menu',
-            icon: Icon(
-                expanded
-                    ? Icons.keyboard_double_arrow_left_rounded
-                    : Icons.keyboard_double_arrow_right_rounded,
-                color: ArcadeColors.muted,
-                size: 20)),
-        const SizedBox(height: 10),
-      ]));
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: .5))
+                      ]))
+                  : const Icon(Icons.bolt_rounded,
+                      size: 17, color: ArcadeColors.cyan)),
+          const SizedBox(height: 10),
+          IconButton(
+              onPressed: onToggle,
+              tooltip: expanded ? 'Recolher menu' : 'Expandir menu',
+              icon: Icon(
+                  expanded
+                      ? Icons.keyboard_double_arrow_left_rounded
+                      : Icons.keyboard_double_arrow_right_rounded,
+                  color: ArcadeColors.muted,
+                  size: 20)),
+          const SizedBox(height: 10),
+        ]));
+  }
 }
 
 class _NavTile extends StatelessWidget {
@@ -570,7 +588,10 @@ class _NavTile extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
-    final color = selected ? ArcadeColors.cyan : ArcadeColors.muted;
+    final light = Theme.of(context).brightness == Brightness.light;
+    final color = selected
+        ? (light ? const Color(0xFF58C7FF) : ArcadeColors.cyan)
+        : (light ? const Color(0xFFE5E7EB) : ArcadeColors.muted);
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 3),
         child: Tooltip(
@@ -603,10 +624,8 @@ class _NavTile extends StatelessWidget {
                             Expanded(
                                 child: Text(section.label,
                                     style: TextStyle(
-                                        color: selected
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .onSurface
+                                        color: selected || light
+                                            ? Colors.white
                                             : ArcadeColors.muted,
                                         fontSize: 11,
                                         fontWeight: selected
@@ -641,15 +660,24 @@ class _MobileNav extends StatelessWidget {
     final primary = sections.take(4).toList();
     final extra = sections.skip(4).toList();
     final selectedInExtra = extra.contains(selected);
+    final light = Theme.of(context).brightness == Brightness.light;
     return Container(
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            border: const Border(top: BorderSide(color: ArcadeColors.divider))),
+            color: light
+                ? const Color(0xFF172033)
+                : Theme.of(context).colorScheme.surface,
+            border: Border(
+                top: BorderSide(
+                    color: light
+                        ? const Color(0xFF2D3A50)
+                        : ArcadeColors.divider))),
         child: SafeArea(
             top: false,
             child: NavigationBar(
               height: 65,
-              backgroundColor: Theme.of(context).colorScheme.surface,
+              backgroundColor: light
+                  ? const Color(0xFF172033)
+                  : Theme.of(context).colorScheme.surface,
               surfaceTintColor: Colors.transparent,
               indicatorColor: ArcadeColors.cyan.withValues(alpha: .1),
               selectedIndex:
