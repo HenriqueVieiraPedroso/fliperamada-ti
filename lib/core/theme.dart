@@ -12,8 +12,8 @@ class ArcadeColors {
   static const yellow = Color(0xFFFFD60A);
   static const red = Color(0xFFFF4D4D);
   static const purple = Color(0xFF8B5CF6);
-  static const muted = Color(0xFF9A9DB6);
-  static const divider = Color(0x22FFFFFF);
+  static const muted = Color(0xFF667085);
+  static const divider = Color(0x3D667085);
   static const ink = Color(0xFFF5F6FF);
 }
 
@@ -92,61 +92,68 @@ class ArcadeTheme {
   static ThemeData get light => ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
-        scaffoldBackgroundColor: const Color(0xFFF4F7FC),
+        scaffoldBackgroundColor: const Color(0xFFEAF0F7),
         colorScheme: const ColorScheme.light(
-          primary: Color(0xFF007D91),
-          secondary: Color(0xFFC21868),
-          tertiary: Color(0xFF4E7800),
+          primary: Color(0xFF005A6B),
+          onPrimary: Colors.white,
+          secondary: Color(0xFFA50F56),
+          onSecondary: Colors.white,
+          tertiary: Color(0xFF365C00),
+          onTertiary: Colors.white,
           surface: Colors.white,
-          error: Color(0xFFBA1A1A),
+          onSurface: Color(0xFF101828),
+          error: Color(0xFFB42318),
+          onError: Colors.white,
         ),
         fontFamily: 'Inter',
         textTheme: const TextTheme(
           displayLarge: TextStyle(
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w700,
-              color: Color(0xFF172033)),
+              color: Color(0xFF101828)),
           displayMedium: TextStyle(
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w700,
-              color: Color(0xFF172033)),
+              color: Color(0xFF101828)),
           headlineLarge: TextStyle(
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w700,
-              color: Color(0xFF172033)),
+              color: Color(0xFF101828)),
           headlineMedium: TextStyle(
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w600,
-              color: Color(0xFF172033)),
+              color: Color(0xFF101828)),
           titleLarge: TextStyle(
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w600,
-              color: Color(0xFF172033)),
-          bodyLarge: TextStyle(fontFamily: 'Inter', color: Color(0xFF172033)),
-          bodyMedium: TextStyle(fontFamily: 'Inter', color: Color(0xFF172033)),
+              color: Color(0xFF101828)),
+          bodyLarge: TextStyle(fontFamily: 'Inter', color: Color(0xFF101828)),
+          bodyMedium: TextStyle(fontFamily: 'Inter', color: Color(0xFF101828)),
           labelLarge:
               TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: const Color(0xFFF7F9FD),
-          hintStyle: const TextStyle(color: Color(0xFF68738A), fontSize: 13),
-          labelStyle: const TextStyle(color: Color(0xFF68738A)),
+          fillColor: const Color(0xFFF8FAFC),
+          hintStyle: const TextStyle(color: Color(0xFF475467), fontSize: 13),
+          labelStyle: const TextStyle(color: Color(0xFF344054)),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Color(0xFFD5DCE8))),
+              borderSide:
+                  const BorderSide(color: Color(0xFF98A2B3), width: 1.1)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Color(0xFFD5DCE8))),
+              borderSide:
+                  const BorderSide(color: Color(0xFF98A2B3), width: 1.1)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide:
-                  const BorderSide(color: Color(0xFF007D91), width: 1.2)),
+                  const BorderSide(color: Color(0xFF005A6B), width: 1.5)),
           errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Color(0xFFBA1A1A))),
+              borderSide: const BorderSide(color: Color(0xFFB42318))),
         ),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: const Color(0xFF172033),
@@ -155,7 +162,7 @@ class ArcadeTheme {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
-        dividerColor: const Color(0xFFD5DCE8),
+        dividerColor: const Color(0xFF98A2B3),
       );
 }
 

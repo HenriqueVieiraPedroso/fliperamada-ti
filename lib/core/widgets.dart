@@ -205,8 +205,9 @@ class SegmentedPills extends StatelessWidget {
                       borderRadius: BorderRadius.circular(9)),
                   child: Text(item,
                       style: TextStyle(
-                          color:
-                              selected ? ArcadeColors.cyan : ArcadeColors.muted,
+                          color: selected
+                              ? Theme.of(context).colorScheme.primary
+                              : ArcadeColors.muted,
                           fontSize: 10,
                           fontWeight: FontWeight.w800)),
                 ),

@@ -490,11 +490,11 @@ class _SideRail extends StatelessWidget {
                           color: ArcadeColors.cyan, size: 20)),
                   if (expanded) ...[
                     const SizedBox(width: 10),
-                    const Expanded(
+                    Expanded(
                         child: Text('FLIPERAMADA\nTI / ARCADE',
                             style: TextStyle(
                                 fontFamily: 'PressStart2P',
-                                color: ArcadeColors.ink,
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: 8,
                                 height: 1.8)))
                   ],
@@ -604,7 +604,9 @@ class _NavTile extends StatelessWidget {
                                 child: Text(section.label,
                                     style: TextStyle(
                                         color: selected
-                                            ? ArcadeColors.ink
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
                                             : ArcadeColors.muted,
                                         fontSize: 11,
                                         fontWeight: selected
