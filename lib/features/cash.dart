@@ -76,9 +76,13 @@ class CashScreen extends StatelessWidget {
                                                   app.cashOpen
                                                       ? 'Turno em andamento'
                                                       : 'Nenhum turno ativo',
-                                                  style: const TextStyle(
-                                                      color: ArcadeColors.muted,
-                                                      fontSize: 11))
+                                                  style: TextStyle(
+                                                      color:
+                                                          arcadeSemanticColor(
+                                                              context,
+                                                              ArcadeColors
+                                                                  .muted),
+                                                      fontSize: 12))
                                             ]),
                                       ])),
                                       if (!narrow)
@@ -127,8 +131,9 @@ class CashScreen extends StatelessWidget {
                                               ],
                                             ]),
                                     ]),
-                                const Divider(
-                                    height: 29, color: ArcadeColors.divider),
+                                Divider(
+                                    height: 29,
+                                    color: arcadeBorderColor(context)),
                                 Wrap(spacing: 35, runSpacing: 15, children: [
                                   _Info(
                                       label: 'OPERADOR',
@@ -145,7 +150,8 @@ class CashScreen extends StatelessWidget {
                                   _Info(
                                       label: 'SALDO EM DINHEIRO',
                                       value: money(app.cashBalance),
-                                      highlight: ArcadeColors.lime),
+                                      highlight: arcadeSemanticColor(
+                                          context, ArcadeColors.lime)),
                                 ]),
                                 if (narrow) ...[
                                   const SizedBox(height: 16),
@@ -257,16 +263,18 @@ class CashScreen extends StatelessWidget {
     final value = await showDialog<double>(
         context: context,
         builder: (context) => AlertDialog(
-                backgroundColor: const Color(0xFF17182F),
+                backgroundColor: arcadeSurfaceColor(context),
                 title: const Text('Abrir caixa',
                     style: TextStyle(fontFamily: 'SpaceGrotesk')),
                 content: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('O valor será registrado como fundo de troco.',
+                      Text('O valor será registrado como fundo de troco.',
                           style: TextStyle(
-                              color: ArcadeColors.muted, fontSize: 11)),
+                              color: arcadeSemanticColor(
+                                  context, ArcadeColors.muted),
+                              fontSize: 12)),
                       const SizedBox(height: 14),
                       TextField(
                           controller: amount,
@@ -302,7 +310,7 @@ class CashScreen extends StatelessWidget {
         useSafeArea: true,
         context: context,
         builder: (context) => AlertDialog(
-                backgroundColor: const Color(0xFF17182F),
+                backgroundColor: arcadeSurfaceColor(context),
                 title: Text(
                     withdrawal ? 'Registrar sangria' : 'Registrar suprimento',
                     style: const TextStyle(fontFamily: 'SpaceGrotesk')),
@@ -367,7 +375,7 @@ class CashScreen extends StatelessWidget {
   void _error(BuildContext context, Object error) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(error.toString().replaceFirst('Bad state: ', '')),
-          backgroundColor: const Color(0xFF401B2A)));
+          backgroundColor: const Color(0xFF8B1E2D)));
   double _parse(String value) => parseMoney(value) ?? double.nan;
 }
 
@@ -380,9 +388,9 @@ class _Info extends StatelessWidget {
   Widget build(BuildContext context) =>
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(label,
-            style: const TextStyle(
-                color: ArcadeColors.muted,
-                fontSize: 8,
+            style: TextStyle(
+                color: arcadeSemanticColor(context, ArcadeColors.muted),
+                fontSize: 10,
                 letterSpacing: .9,
                 fontWeight: FontWeight.w800)),
         const SizedBox(height: 6),
@@ -390,7 +398,9 @@ class _Info extends StatelessWidget {
             style: TextStyle(
                 fontFamily: 'SpaceGrotesk',
                 fontSize: 13,
-                color: highlight ?? ArcadeColors.ink,
+                color: highlight == null
+                    ? Theme.of(context).colorScheme.onSurface
+                    : arcadeSemanticColor(context, highlight!),
                 fontWeight: FontWeight.w700))
       ]);
 }
@@ -400,13 +410,15 @@ class _MovementTile extends StatelessWidget {
   final CashEntry entry;
   @override
   Widget build(BuildContext context) {
-    final color = switch (entry.type) {
-      'Sangria' => ArcadeColors.red,
-      'Suprimento' => ArcadeColors.lime,
-      'Venda' => ArcadeColors.cyan,
-      'Fechamento' => ArcadeColors.yellow,
-      _ => ArcadeColors.purple
-    };
+    final color = arcadeSemanticColor(
+        context,
+        switch (entry.type) {
+          'Sangria' => ArcadeColors.red,
+          'Suprimento' => ArcadeColors.lime,
+          'Venda' => ArcadeColors.cyan,
+          'Fechamento' => ArcadeColors.yellow,
+          _ => ArcadeColors.purple
+        });
     final icon = switch (entry.type) {
       'Sangria' => Icons.south_west_rounded,
       'Suprimento' => Icons.north_east_rounded,
@@ -425,7 +437,7 @@ class _MovementTile extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: color.withValues(alpha: .1), shape: BoxShape.circle),
                 child: Icon(icon, color: color, size: 15)),
-            Container(width: 1, height: 28, color: ArcadeColors.divider)
+            Container(width: 1, height: 28, color: arcadeBorderColor(context))
           ]),
           const SizedBox(width: 10),
           Expanded(
@@ -442,8 +454,9 @@ class _MovementTile extends StatelessWidget {
                         : '${entry.note} · ${shortTime(entry.createdAt)}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style:
-                        const TextStyle(color: ArcadeColors.muted, fontSize: 9))
+                    style: TextStyle(
+                        color: arcadeSemanticColor(context, ArcadeColors.muted),
+                        fontSize: 10))
               ])),
           Text(money(entry.amount),
               style: TextStyle(
@@ -470,7 +483,7 @@ class _PaymentLegend extends StatelessWidget {
                     height: 7,
                     decoration: BoxDecoration(
                         color: [
-                          ArcadeColors.lime,
+                          arcadeSemanticColor(context, ArcadeColors.lime),
                           ArcadeColors.cyan,
                           ArcadeColors.purple,
                           ArcadeColors.magenta
@@ -479,8 +492,10 @@ class _PaymentLegend extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                     child: Text(['Dinheiro', 'PIX', 'Débito', 'Crédito'][i],
-                        style: const TextStyle(
-                            color: ArcadeColors.muted, fontSize: 10))),
+                        style: TextStyle(
+                            color: arcadeSemanticColor(
+                                context, ArcadeColors.muted),
+                            fontSize: 11))),
                 Text(money(values[i]),
                     style: const TextStyle(
                         fontSize: 10, fontWeight: FontWeight.w700))
@@ -522,7 +537,7 @@ class _CloseWizardState extends State<_CloseWizard> {
 
   @override
   Widget build(BuildContext context) => Dialog(
-      backgroundColor: const Color(0xFF15162E),
+      backgroundColor: arcadeSurfaceColor(context),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(22),
           side: BorderSide(color: ArcadeColors.cyan.withValues(alpha: .18))),
@@ -554,8 +569,10 @@ class _CloseWizardState extends State<_CloseWizard> {
                         _step == 0
                             ? 'Informe o valor contado por forma de pagamento.'
                             : 'Compare o valor contado com o esperado.',
-                        style: const TextStyle(
-                            color: ArcadeColors.muted, fontSize: 11)),
+                        style: TextStyle(
+                            color: arcadeSemanticColor(
+                                context, ArcadeColors.muted),
+                            fontSize: 12)),
                     const SizedBox(height: 18),
                     if (_step == 0) ...[
                       for (final key in _fields.keys)
@@ -573,22 +590,27 @@ class _CloseWizardState extends State<_CloseWizard> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 13, vertical: 10),
                           decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: .04),
+                              color: arcadeSoftSurfaceColor(context),
                               borderRadius: BorderRadius.circular(12)),
                           child: Column(children: [
-                            const Row(children: [
+                            Row(children: [
                               Expanded(
                                   child: Text('FORMA',
                                       style: TextStyle(
-                                          fontSize: 8,
-                                          color: ArcadeColors.muted))),
+                                          fontSize: 9,
+                                          color: arcadeSemanticColor(
+                                              context, ArcadeColors.muted)))),
                               Text('ESPERADO',
                                   style: TextStyle(
-                                      fontSize: 8, color: ArcadeColors.muted)),
-                              SizedBox(width: 18),
+                                      fontSize: 9,
+                                      color: arcadeSemanticColor(
+                                          context, ArcadeColors.muted))),
+                              const SizedBox(width: 18),
                               Text('CONTADO',
                                   style: TextStyle(
-                                      fontSize: 8, color: ArcadeColors.muted))
+                                      fontSize: 9,
+                                      color: arcadeSemanticColor(
+                                          context, ArcadeColors.muted)))
                             ]),
                             for (final key in _fields.keys)
                               Padding(
@@ -597,9 +619,11 @@ class _CloseWizardState extends State<_CloseWizard> {
                                   child: Row(children: [
                                     Expanded(
                                         child: Text(key,
-                                            style: const TextStyle(
-                                                color: ArcadeColors.muted,
-                                                fontSize: 10))),
+                                            style: TextStyle(
+                                                color: arcadeSemanticColor(
+                                                    context,
+                                                    ArcadeColors.muted),
+                                                fontSize: 11))),
                                     Text(money(_expected[key]!),
                                         style: const TextStyle(fontSize: 10)),
                                     const SizedBox(width: 12),
@@ -608,7 +632,7 @@ class _CloseWizardState extends State<_CloseWizard> {
                                             fontSize: 10,
                                             fontWeight: FontWeight.w800))
                                   ])),
-                            const Divider(color: ArcadeColors.divider),
+                            Divider(color: arcadeBorderColor(context)),
                             Row(children: [
                               const Expanded(
                                   child: Text('DIFERENÇA',

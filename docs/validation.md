@@ -1,4 +1,14 @@
 
-### Validação desta revisão
+## Segunda revisão visual — Caixa e Equipe
 
-Na execução final com Flutter 3.50.1 e Dart 3.14.0: `flutter analyze` terminou com **No issues found!**; `flutter test --platform chrome --reporter expanded` terminou com **12 testes aprovados**; e `bash scripts/vercel-build.sh` terminou com **Built build/web**. O build foi regenerado em `build/web`; o ZIP de entrega omite caches temporários e pode regenerar esse diretório pelo script da Vercel.
+Data: 26/11/2026. Foram aplicadas melhorias adicionais no tema claro em todo o fluxo prioritário de operação:
+
+- verde semântico substituído por verde escuro de alto contraste;
+- textos de operador, abertura, subtítulos e metadados ampliados e escurecidos;
+- diálogos de abertura, suprimento, sangria e fechamento de Caixa passaram a usar a superfície do tema em vez de fundos escuros fixos;
+- painel interno do fechamento, legendas e divisórias passaram a acompanhar o tema claro;
+- formulários de colaborador e seleção de colaborador para escala passaram a usar superfícies claras;
+- dias da semana e células da escala receberam mais largura, altura, margem e espaçamento;
+- elementos pequenos da tela de Equipe foram ampliados sem alterar o tema escuro.
+
+Validação desta revisão: `flutter analyze` sem issues; `flutter test --platform chrome --reporter expanded` com 12 testes aprovados; `bash scripts/vercel-build.sh` com `Built build/web`.

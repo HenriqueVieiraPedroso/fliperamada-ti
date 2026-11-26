@@ -18,18 +18,35 @@ class ArcadeColors {
   static const lightInk = Color(0xFF0B1220);
   static const lightMuted = Color(0xFF344054);
   static const lightBorder = Color(0xFF667085);
+  static const lightLime = Color(0xFF166534);
 }
 
 Color arcadeSemanticColor(BuildContext context, Color color) {
   if (Theme.of(context).brightness != Brightness.light) return color;
   if (color == ArcadeColors.cyan) return const Color(0xFF005A6B);
   if (color == ArcadeColors.magenta) return const Color(0xFFA50F56);
-  if (color == ArcadeColors.lime) return const Color(0xFF287A3D);
+  if (color == ArcadeColors.lime) return ArcadeColors.lightLime;
   if (color == ArcadeColors.yellow) return const Color(0xFF8A4B00);
   if (color == ArcadeColors.red) return const Color(0xFFB42318);
   if (color == ArcadeColors.purple) return const Color(0xFF6B21A8);
+  if (color == ArcadeColors.muted) return ArcadeColors.lightMuted;
   return color;
 }
+
+Color arcadeSurfaceColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+        ? Theme.of(context).colorScheme.surface
+        : const Color(0xFF15162E);
+
+Color arcadeSoftSurfaceColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+        ? const Color(0xFFF1F5F9)
+        : Colors.white.withValues(alpha: .04);
+
+Color arcadeBorderColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+        ? ArcadeColors.lightBorder
+        : ArcadeColors.divider;
 
 class ArcadeTheme {
   static ThemeData get dark => ThemeData(
@@ -141,8 +158,10 @@ class ArcadeTheme {
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w600,
               color: ArcadeColors.lightInk),
-          bodyLarge: TextStyle(fontFamily: 'Inter', color: ArcadeColors.lightInk),
-          bodyMedium: TextStyle(fontFamily: 'Inter', color: ArcadeColors.lightInk),
+          bodyLarge:
+              TextStyle(fontFamily: 'Inter', color: ArcadeColors.lightInk),
+          bodyMedium:
+              TextStyle(fontFamily: 'Inter', color: ArcadeColors.lightInk),
           labelLarge:
               TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
         ),
@@ -167,7 +186,8 @@ class ArcadeTheme {
               borderSide: const BorderSide(color: Color(0xFF004B59), width: 2)),
           errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Color(0xFFB42318), width: 1.5)),
+              borderSide:
+                  const BorderSide(color: Color(0xFFB42318), width: 1.5)),
         ),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: const Color(0xFF172033),
@@ -178,7 +198,6 @@ class ArcadeTheme {
         ),
         dividerColor: ArcadeColors.lightBorder,
       );
-
 }
 
 class ThemeController extends ChangeNotifier {
@@ -357,27 +376,27 @@ class StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final displayColor = arcadeSemanticColor(context, color);
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-            color: displayColor.withValues(alpha: .16),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: displayColor.withValues(alpha: .45))),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          if (dot) ...[
-            _StatusChipDot(color: displayColor),
-            const SizedBox(width: 7)
-          ],
-          Flexible(
-              child: Text(label.toUpperCase(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: displayColor,
-                      fontSize: 9,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: .7))),
-        ]),
-      );
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+          color: displayColor.withValues(alpha: .16),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: displayColor.withValues(alpha: .45))),
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
+        if (dot) ...[
+          _StatusChipDot(color: displayColor),
+          const SizedBox(width: 7)
+        ],
+        Flexible(
+            child: Text(label.toUpperCase(),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    color: displayColor,
+                    fontSize: 9,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: .7))),
+      ]),
+    );
   }
 }
 

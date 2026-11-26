@@ -51,18 +51,22 @@ class _TeamScreenState extends State<TeamScreen>
                 const SizedBox(height: 17),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: .025),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: .025),
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: ArcadeColors.divider),
+                    border: Border.all(color: arcadeBorderColor(context)),
                   ),
                   child: TabBar(
                     controller: _tabs,
                     isScrollable: true,
                     tabAlignment: TabAlignment.start,
                     dividerColor: Colors.transparent,
-                    indicatorColor: ArcadeColors.cyan,
-                    labelColor: ArcadeColors.cyan,
-                    unselectedLabelColor: ArcadeColors.muted,
+                    indicatorColor:
+                        arcadeSemanticColor(context, ArcadeColors.cyan),
+                    labelColor: arcadeSemanticColor(context, ArcadeColors.cyan),
+                    unselectedLabelColor:
+                        arcadeSemanticColor(context, ArcadeColors.muted),
                     labelStyle: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
@@ -156,19 +160,20 @@ class _TeamScreenState extends State<TeamScreen>
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: ConstrainedBox(
-                constraints: const BoxConstraints(minWidth: 940),
+                constraints: const BoxConstraints(minWidth: 1080),
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        const SizedBox(width: 152),
+                        const SizedBox(width: 168),
                         ...days.map((day) => Expanded(
                               child: Center(
                                 child: Text(
                                   day,
-                                  style: const TextStyle(
-                                    color: ArcadeColors.muted,
-                                    fontSize: 8,
+                                  style: TextStyle(
+                                    color: arcadeSemanticColor(
+                                        context, ArcadeColors.muted),
+                                    fontSize: 10,
                                     letterSpacing: 1,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -181,13 +186,13 @@ class _TeamScreenState extends State<TeamScreen>
                     ...List.generate(
                       3,
                       (shiftIndex) => Padding(
-                        padding: const EdgeInsets.only(bottom: 7),
+                        padding: const EdgeInsets.only(bottom: 10),
                         child: SizedBox(
-                          height: 90,
+                          height: 104,
                           child: Row(
                             children: [
                               SizedBox(
-                                width: 152,
+                                width: 168,
                                 child: Row(
                                   children: [
                                     Icon(shiftIcons[shiftIndex],
@@ -259,8 +264,10 @@ class _TeamScreenState extends State<TeamScreen>
                               ? 'Ainda não há blocos. Use + em uma célula vazia para atribuir um colaborador.'
                               : 'Ainda não há blocos de escala cadastrados.',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              color: ArcadeColors.muted, fontSize: 9),
+                          style: TextStyle(
+                              color: arcadeSemanticColor(
+                                  context, ArcadeColors.muted),
+                              fontSize: 11),
                         ),
                       ),
                   ],
@@ -308,7 +315,7 @@ class _TeamScreenState extends State<TeamScreen>
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      backgroundColor: const Color(0xFF14152C),
+      backgroundColor: arcadeSurfaceColor(context),
       builder: (sheetContext) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(18, 18, 18, 10),
@@ -323,14 +330,20 @@ class _TeamScreenState extends State<TeamScreen>
               const SizedBox(height: 12),
               ...activePeople.map((person) => ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: ArcadeColors.cyan.withValues(alpha: .12),
+                      backgroundColor:
+                          arcadeSemanticColor(context, ArcadeColors.cyan)
+                              .withValues(alpha: .14),
                       child: Text(person.avatar,
-                          style: const TextStyle(color: ArcadeColors.cyan)),
+                          style: TextStyle(
+                              color: arcadeSemanticColor(
+                                  context, ArcadeColors.cyan))),
                     ),
                     title: Text(person.name),
                     subtitle: Text(person.position,
-                        style: const TextStyle(
-                            color: ArcadeColors.muted, fontSize: 10)),
+                        style: TextStyle(
+                            color: arcadeSemanticColor(
+                                context, ArcadeColors.muted),
+                            fontSize: 11)),
                     onTap: () => Navigator.of(sheetContext).pop(person.id),
                   )),
               TextButton(
@@ -374,15 +387,17 @@ class _TeamScreenState extends State<TeamScreen>
                   height: 75,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: (clockedIn ? ArcadeColors.lime : ArcadeColors.cyan)
-                        .withValues(alpha: .11),
+                    color: arcadeSemanticColor(context,
+                            clockedIn ? ArcadeColors.lime : ArcadeColors.cyan)
+                        .withValues(alpha: .14),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     clockedIn
                         ? Icons.more_time_rounded
                         : Icons.play_arrow_rounded,
-                    color: clockedIn ? ArcadeColors.lime : ArcadeColors.cyan,
+                    color: arcadeSemanticColor(context,
+                        clockedIn ? ArcadeColors.lime : ArcadeColors.cyan),
                     size: 33,
                   ),
                 ),
@@ -398,8 +413,9 @@ class _TeamScreenState extends State<TeamScreen>
                       ? 'Início registrado às ${shortTime(app.clockedInAt!.toLocal())}'
                       : 'Registre o início ou o encerramento do seu turno.',
                   textAlign: TextAlign.center,
-                  style:
-                      const TextStyle(color: ArcadeColors.muted, fontSize: 10),
+                  style: TextStyle(
+                      color: arcadeSemanticColor(context, ArcadeColors.muted),
+                      fontSize: 11),
                 ),
                 const SizedBox(height: 17),
                 NeonButton(
@@ -460,8 +476,10 @@ class _TeamScreenState extends State<TeamScreen>
                               value == 0
                                   ? '0 h'
                                   : '${value.toStringAsFixed(1).replaceAll('.', ',')} h',
-                              style: const TextStyle(
-                                  color: ArcadeColors.muted, fontSize: 8),
+                              style: TextStyle(
+                                  color: arcadeSemanticColor(
+                                      context, ArcadeColors.muted),
+                                  fontSize: 10),
                             ),
                             const SizedBox(height: 6),
                             Container(
@@ -482,8 +500,10 @@ class _TeamScreenState extends State<TeamScreen>
                             const SizedBox(height: 7),
                             Text(
                               const ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'][index],
-                              style: const TextStyle(
-                                  color: ArcadeColors.muted, fontSize: 8),
+                              style: TextStyle(
+                                  color: arcadeSemanticColor(
+                                      context, ArcadeColors.muted),
+                                  fontSize: 10),
                             ),
                           ],
                         ),
@@ -492,9 +512,11 @@ class _TeamScreenState extends State<TeamScreen>
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'Horas calculadas a partir dos registros reais de ponto.',
-                  style: TextStyle(color: ArcadeColors.muted, fontSize: 9),
+                  style: TextStyle(
+                      color: arcadeSemanticColor(context, ArcadeColors.muted),
+                      fontSize: 10),
                 ),
               ],
             ),
@@ -549,8 +571,10 @@ class _TeamScreenState extends State<TeamScreen>
                                 ),
                                 Text(
                                   '${shortDate(started)} · ${shortTime(started)} – ${ended == null ? 'em andamento' : shortTime(ended)}',
-                                  style: const TextStyle(
-                                      color: ArcadeColors.muted, fontSize: 8),
+                                  style: TextStyle(
+                                      color: arcadeSemanticColor(
+                                          context, ArcadeColors.muted),
+                                      fontSize: 10),
                                 ),
                               ],
                             ),
@@ -586,7 +610,7 @@ class _TeamScreenState extends State<TeamScreen>
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      backgroundColor: const Color(0xFF14152C),
+      backgroundColor: arcadeSurfaceColor(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -673,16 +697,18 @@ class _ScheduleCell extends StatelessWidget {
         builder: (context, candidates, rejected) {
           final hovering = candidates.isNotEmpty;
           return Container(
-            margin: const EdgeInsets.all(3),
+            margin: const EdgeInsets.all(5),
             height: double.infinity,
             decoration: BoxDecoration(
               color: hovering
-                  ? ArcadeColors.cyan.withValues(alpha: .1)
-                  : Colors.white.withValues(alpha: .025),
+                  ? arcadeSemanticColor(context, ArcadeColors.cyan)
+                      .withValues(alpha: .12)
+                  : arcadeSoftSurfaceColor(context),
               border: Border.all(
                 color: hovering
-                    ? ArcadeColors.cyan.withValues(alpha: .45)
-                    : ArcadeColors.divider,
+                    ? arcadeSemanticColor(context, ArcadeColors.cyan)
+                        .withValues(alpha: .55)
+                    : arcadeBorderColor(context),
               ),
               borderRadius: BorderRadius.circular(9),
             ),
@@ -692,8 +718,10 @@ class _ScheduleCell extends StatelessWidget {
                         child: IconButton(
                           tooltip: 'Adicionar colaborador à escala',
                           onPressed: onAdd,
-                          icon: const Icon(Icons.add_rounded,
-                              color: ArcadeColors.muted, size: 17),
+                          icon: Icon(Icons.add_rounded,
+                              color: arcadeSemanticColor(
+                                  context, ArcadeColors.muted),
+                              size: 19),
                         ),
                       )
                     : const SizedBox.shrink()
@@ -820,7 +848,7 @@ class _TeamMemberFormState extends State<_TeamMemberForm> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 760),
             child: Material(
-              color: const Color(0xFF14152C),
+              color: arcadeSurfaceColor(context),
               child: Column(
                 children: [
                   Padding(
@@ -847,7 +875,7 @@ class _TeamMemberFormState extends State<_TeamMemberForm> {
                       ],
                     ),
                   ),
-                  const Divider(height: 1, color: ArcadeColors.divider),
+                  Divider(height: 1, color: arcadeBorderColor(context)),
                   Expanded(
                     child: Form(
                       key: _formKey,
@@ -1024,14 +1052,16 @@ class _TeamMemberFormState extends State<_TeamMemberForm> {
                               SwitchListTile.adaptive(
                                 contentPadding: EdgeInsets.zero,
                                 value: _active,
-                                activeThumbColor: ArcadeColors.lime,
+                                activeThumbColor: arcadeSemanticColor(
+                                    context, ArcadeColors.lime),
                                 title: const Text('Colaborador ativo',
                                     style: TextStyle(fontSize: 11)),
-                                subtitle: const Text(
+                                subtitle: Text(
                                     'Preserva os dados sem conceder acesso a um perfil inativo.',
                                     style: TextStyle(
-                                        color: ArcadeColors.muted,
-                                        fontSize: 9)),
+                                        color: arcadeSemanticColor(
+                                            context, ArcadeColors.muted),
+                                        fontSize: 10)),
                                 onChanged: (value) =>
                                     setState(() => _active = value),
                               ),
@@ -1041,7 +1071,7 @@ class _TeamMemberFormState extends State<_TeamMemberForm> {
                       ),
                     ),
                   ),
-                  const Divider(height: 1, color: ArcadeColors.divider),
+                  Divider(height: 1, color: arcadeBorderColor(context)),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(22, 12, 22, 16),
                     child: Row(
@@ -1177,8 +1207,10 @@ class _MemberCard extends StatelessWidget {
                           fontSize: 12, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 4),
                   Text(person.position,
-                      style: const TextStyle(
-                          color: ArcadeColors.muted, fontSize: 9)),
+                      style: TextStyle(
+                          color:
+                              arcadeSemanticColor(context, ArcadeColors.muted),
+                          fontSize: 11)),
                   const SizedBox(height: 7),
                   Wrap(
                     spacing: 7,
@@ -1201,8 +1233,9 @@ class _MemberCard extends StatelessWidget {
               ),
             ),
             if (canSeePrivate)
-              const Icon(Icons.chevron_right_rounded,
-                  color: ArcadeColors.muted, size: 18),
+              Icon(Icons.chevron_right_rounded,
+                  color: arcadeSemanticColor(context, ArcadeColors.muted),
+                  size: 19),
           ],
         ),
       );
