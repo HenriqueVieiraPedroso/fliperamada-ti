@@ -15,6 +15,20 @@ class ArcadeColors {
   static const muted = Color(0xFF667085);
   static const divider = Color(0x3D667085);
   static const ink = Color(0xFFF5F6FF);
+  static const lightInk = Color(0xFF0B1220);
+  static const lightMuted = Color(0xFF344054);
+  static const lightBorder = Color(0xFF667085);
+}
+
+Color arcadeSemanticColor(BuildContext context, Color color) {
+  if (Theme.of(context).brightness != Brightness.light) return color;
+  if (color == ArcadeColors.cyan) return const Color(0xFF005A6B);
+  if (color == ArcadeColors.magenta) return const Color(0xFFA50F56);
+  if (color == ArcadeColors.lime) return const Color(0xFF287A3D);
+  if (color == ArcadeColors.yellow) return const Color(0xFF8A4B00);
+  if (color == ArcadeColors.red) return const Color(0xFFB42318);
+  if (color == ArcadeColors.purple) return const Color(0xFF6B21A8);
+  return color;
 }
 
 class ArcadeTheme {
@@ -92,16 +106,16 @@ class ArcadeTheme {
   static ThemeData get light => ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
-        scaffoldBackgroundColor: const Color(0xFFEAF0F7),
+        scaffoldBackgroundColor: const Color(0xFFE9EEF5),
         colorScheme: const ColorScheme.light(
-          primary: Color(0xFF005A6B),
+          primary: Color(0xFF004B59),
           onPrimary: Colors.white,
-          secondary: Color(0xFFA50F56),
+          secondary: Color(0xFF8A0B49),
           onSecondary: Colors.white,
-          tertiary: Color(0xFF365C00),
+          tertiary: Color(0xFF275500),
           onTertiary: Colors.white,
           surface: Colors.white,
-          onSurface: Color(0xFF101828),
+          onSurface: ArcadeColors.lightInk,
           error: Color(0xFFB42318),
           onError: Colors.white,
         ),
@@ -110,50 +124,50 @@ class ArcadeTheme {
           displayLarge: TextStyle(
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w700,
-              color: Color(0xFF101828)),
+              color: ArcadeColors.lightInk),
           displayMedium: TextStyle(
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w700,
-              color: Color(0xFF101828)),
+              color: ArcadeColors.lightInk),
           headlineLarge: TextStyle(
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w700,
-              color: Color(0xFF101828)),
+              color: ArcadeColors.lightInk),
           headlineMedium: TextStyle(
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w600,
-              color: Color(0xFF101828)),
+              color: ArcadeColors.lightInk),
           titleLarge: TextStyle(
               fontFamily: 'SpaceGrotesk',
               fontWeight: FontWeight.w600,
-              color: Color(0xFF101828)),
-          bodyLarge: TextStyle(fontFamily: 'Inter', color: Color(0xFF101828)),
-          bodyMedium: TextStyle(fontFamily: 'Inter', color: Color(0xFF101828)),
+              color: ArcadeColors.lightInk),
+          bodyLarge: TextStyle(fontFamily: 'Inter', color: ArcadeColors.lightInk),
+          bodyMedium: TextStyle(fontFamily: 'Inter', color: ArcadeColors.lightInk),
           labelLarge:
               TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: const Color(0xFFF8FAFC),
-          hintStyle: const TextStyle(color: Color(0xFF475467), fontSize: 13),
-          labelStyle: const TextStyle(color: Color(0xFF344054)),
+          fillColor: Colors.white,
+          hintStyle:
+              const TextStyle(color: ArcadeColors.lightMuted, fontSize: 13),
+          labelStyle: const TextStyle(color: ArcadeColors.lightInk),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:
-                  const BorderSide(color: Color(0xFF98A2B3), width: 1.1)),
+              borderSide: const BorderSide(
+                  color: ArcadeColors.lightBorder, width: 1.4)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:
-                  const BorderSide(color: Color(0xFF98A2B3), width: 1.1)),
+              borderSide: const BorderSide(
+                  color: ArcadeColors.lightBorder, width: 1.4)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:
-                  const BorderSide(color: Color(0xFF005A6B), width: 1.5)),
+              borderSide: const BorderSide(color: Color(0xFF004B59), width: 2)),
           errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Color(0xFFB42318))),
+              borderSide: const BorderSide(color: Color(0xFFB42318), width: 1.5)),
         ),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: const Color(0xFF172033),
@@ -162,8 +176,9 @@ class ArcadeTheme {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
-        dividerColor: const Color(0xFF98A2B3),
+        dividerColor: ArcadeColors.lightBorder,
       );
+
 }
 
 class ThemeController extends ChangeNotifier {
@@ -280,7 +295,9 @@ class NeonButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final light = Theme.of(context).brightness == Brightness.light;
     final colors = danger
-        ? const [ArcadeColors.red, Color(0xFFFF2E68)]
+        ? (light
+            ? const [Color(0xFFB42318), Color(0xFF912018)]
+            : const [ArcadeColors.red, Color(0xFFFF2E68)])
         : light
             ? const [Color(0xFF1769E0), Color(0xFF0B5BD3)]
             : const [ArcadeColors.cyan, ArcadeColors.purple];
@@ -337,25 +354,31 @@ class StatusChip extends StatelessWidget {
   final Color color;
   final bool dot;
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) {
+    final displayColor = arcadeSemanticColor(context, color);
+    return Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-            color: color.withValues(alpha: .11),
+            color: displayColor.withValues(alpha: .16),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: color.withValues(alpha: .2))),
+            border: Border.all(color: displayColor.withValues(alpha: .45))),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          if (dot) ...[_StatusChipDot(color: color), const SizedBox(width: 7)],
+          if (dot) ...[
+            _StatusChipDot(color: displayColor),
+            const SizedBox(width: 7)
+          ],
           Flexible(
               child: Text(label.toUpperCase(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                      color: color,
+                      color: displayColor,
                       fontSize: 9,
                       fontWeight: FontWeight.w800,
                       letterSpacing: .7))),
         ]),
       );
+  }
 }
 
 class _StatusChipDot extends StatefulWidget {
@@ -441,8 +464,9 @@ class PageTitle extends StatelessWidget {
                     ?.copyWith(fontSize: 25, letterSpacing: -.6)),
             const SizedBox(height: 5),
             Text(subtitle,
-                style:
-                    const TextStyle(color: ArcadeColors.muted, fontSize: 12)),
+                style: TextStyle(
+                    color: arcadeSemanticColor(context, ArcadeColors.muted),
+                    fontSize: 12)),
           ]);
           if (constraints.maxWidth < 600) {
             return Column(

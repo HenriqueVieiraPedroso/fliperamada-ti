@@ -65,7 +65,8 @@ class KpiCard extends StatelessWidget {
             .replaceAll(',', '.'))
         : null;
     final isNegativeChange = changeAmount != null && changeAmount < 0;
-    final changeColor = isNegativeChange ? ArcadeColors.red : ArcadeColors.lime;
+    final changeColor = arcadeSemanticColor(
+        context, isNegativeChange ? ArcadeColors.red : ArcadeColors.lime);
     final changeIcon = isNegativeChange
         ? Icons.trending_down_rounded
         : Icons.trending_up_rounded;
@@ -77,10 +78,10 @@ class KpiCard extends StatelessWidget {
         Row(children: [
           Expanded(
               child: Text(label.toUpperCase(),
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 9,
                       letterSpacing: 1,
-                      color: ArcadeColors.muted,
+                      color: arcadeSemanticColor(context, ArcadeColors.muted),
                       fontWeight: FontWeight.w800))),
           Icon(icon, size: 17, color: color.withValues(alpha: .92)),
         ]),
@@ -126,12 +127,14 @@ class KpiCard extends StatelessWidget {
             if (showSparkline) ...[
               const SizedBox(width: 7),
               if (isPercentChange)
-                const Expanded(
+                Expanded(
                     child: Text('vs. período anterior',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style:
-                            TextStyle(color: ArcadeColors.muted, fontSize: 9)))
+                        style: TextStyle(
+                            color: arcadeSemanticColor(
+                                context, ArcadeColors.muted),
+                            fontSize: 9)))
               else
                 const Spacer(),
               SizedBox(
@@ -164,7 +167,9 @@ class PanelHeading extends StatelessWidget {
           if (subtitle != null) ...[
             const SizedBox(height: 4),
             Text(subtitle!,
-                style: const TextStyle(color: ArcadeColors.muted, fontSize: 10))
+                style: TextStyle(
+                    color: arcadeSemanticColor(context, ArcadeColors.muted),
+                    fontSize: 10))
           ],
         ])),
         if (trailing != null) trailing!,
@@ -186,7 +191,10 @@ class SegmentedPills extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: .045),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: ArcadeColors.divider)),
+            border: Border.all(
+                color: Theme.of(context).brightness == Brightness.light
+                    ? ArcadeColors.lightBorder
+                    : ArcadeColors.divider)),
         child: Row(
             mainAxisSize: MainAxisSize.min,
             children: items.map((item) {
@@ -207,7 +215,8 @@ class SegmentedPills extends StatelessWidget {
                       style: TextStyle(
                           color: selected
                               ? Theme.of(context).colorScheme.primary
-                              : ArcadeColors.muted,
+                              : arcadeSemanticColor(
+                                  context, ArcadeColors.muted),
                           fontSize: 10,
                           fontWeight: FontWeight.w800)),
                 ),
@@ -240,8 +249,10 @@ class EmptyState extends StatelessWidget {
                     const SizedBox(height: 11),
                     Text(message,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: ArcadeColors.muted, fontSize: 11)),
+                        style: TextStyle(
+                            color: arcadeSemanticColor(
+                                context, ArcadeColors.muted),
+                            fontSize: 11)),
                   ])));
         },
       );

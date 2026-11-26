@@ -152,7 +152,7 @@ class _AppShellState extends State<AppShell> {
         context: context,
         isScrollControlled: true,
         useSafeArea: true,
-        backgroundColor: const Color(0xFF14152C),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         builder: (sheetContext) => SizedBox(
             height: MediaQuery.sizeOf(sheetContext).height * .7,
             child: Column(children: [
@@ -208,21 +208,28 @@ class _AppShellState extends State<AppShell> {
 class _DemoBanner extends StatelessWidget {
   const _DemoBanner();
   @override
-  Widget build(BuildContext context) => Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 8),
-      color: ArcadeColors.yellow.withValues(alpha: .075),
-      child: const Row(children: [
-        Icon(Icons.science_outlined, size: 14, color: ArcadeColors.yellow),
-        SizedBox(width: 8),
-        Expanded(
-            child: Text(
-                'MODO DEMONSTRAÇÃO — dados fictícios; nenhuma alteração é salva no Supabase.',
-                style: TextStyle(
-                    color: ArcadeColors.yellow,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700))),
-      ]));
+  Widget build(BuildContext context) {
+    final light = Theme.of(context).brightness == Brightness.light;
+    final accent = light ? const Color(0xFF7A4100) : ArcadeColors.yellow;
+    final background = light
+        ? const Color(0xFFFFF4CC)
+        : ArcadeColors.yellow.withValues(alpha: .075);
+    return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 8),
+        color: background,
+        child: Row(children: [
+          Icon(Icons.science_outlined, size: 14, color: accent),
+          const SizedBox(width: 8),
+          Expanded(
+              child: Text(
+                  'MODO DEMONSTRAÇÃO — dados fictícios; nenhuma alteração é salva no Supabase.',
+                  style: TextStyle(
+                      color: accent,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700))),
+        ]));
+  }
 }
 
 class _TopBar extends StatelessWidget {
@@ -240,9 +247,12 @@ class _TopBar extends StatelessWidget {
         return Container(
             height: 72,
             padding: EdgeInsets.symmetric(horizontal: compact ? 16 : 26),
-            decoration: const BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(color: ArcadeColors.divider))),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        color: light
+                            ? const Color(0xFFD0D5DD)
+                            : ArcadeColors.divider))),
             child: Row(children: [
               if (compact) ...[
                 const Icon(Icons.sports_esports_rounded,
@@ -261,7 +271,7 @@ class _TopBar extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                               color: light
-                                  ? const Color(0xFFD0D5DD)
+                                  ? const Color(0xFF667085)
                                   : ArcadeColors.divider)),
                       child: TextField(
                           controller: search,
@@ -403,7 +413,10 @@ class _CashIndicator extends StatelessWidget {
   final bool open;
   @override
   Widget build(BuildContext context) {
-    final color = open ? ArcadeColors.lime : ArcadeColors.red;
+    final light = Theme.of(context).brightness == Brightness.light;
+    final color = open
+        ? (light ? const Color(0xFF287A3D) : ArcadeColors.lime)
+        : (light ? const Color(0xFFB42318) : ArcadeColors.red);
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
         decoration: BoxDecoration(
@@ -590,7 +603,7 @@ class _NavTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final light = Theme.of(context).brightness == Brightness.light;
     final color = selected
-        ? (light ? const Color(0xFF58C7FF) : ArcadeColors.cyan)
+        ? (light ? const Color(0xFF00D7E6) : ArcadeColors.cyan)
         : (light ? const Color(0xFFE5E7EB) : ArcadeColors.muted);
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 3),
@@ -624,9 +637,11 @@ class _NavTile extends StatelessWidget {
                             Expanded(
                                 child: Text(section.label,
                                     style: TextStyle(
-                                        color: selected || light
+                                        color: light
                                             ? Colors.white
-                                            : ArcadeColors.muted,
+                                            : (selected
+                                                ? ArcadeColors.ink
+                                                : ArcadeColors.muted),
                                         fontSize: 11,
                                         fontWeight: selected
                                             ? FontWeight.w800
