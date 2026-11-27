@@ -261,38 +261,42 @@ class CashScreen extends StatelessWidget {
   Future<void> _openDialog(BuildContext context, AppController app) async {
     final amount = TextEditingController(text: app.isDemo ? '150' : '');
     final value = await showDialog<double>(
+        barrierDismissible: true,
         context: context,
-        builder: (context) => AlertDialog(
-                backgroundColor: arcadeSurfaceColor(context),
-                title: const Text('Abrir caixa',
-                    style: TextStyle(fontFamily: 'SpaceGrotesk')),
-                content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('O valor será registrado como fundo de troco.',
-                          style: TextStyle(
-                              color: arcadeSemanticColor(
-                                  context, ArcadeColors.muted),
-                              fontSize: 12)),
-                      const SizedBox(height: 14),
-                      TextField(
-                          controller: amount,
-                          autofocus: true,
-                          keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          decoration: const InputDecoration(
-                              labelText: 'Valor inicial', prefixText: 'R\$ '))
-                    ]),
-                actions: [
-                  TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancelar')),
-                  NeonButton(
-                      label: 'ABRIR TURNO',
-                      onPressed: () =>
-                          Navigator.pop(context, _parse(amount.text)))
-                ]));
+        builder: (dialogContext) => Dialog(
+              backgroundColor: arcadeSurfaceColor(dialogContext),
+              insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 430),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 22, 24, 18),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    _CashDialogHeader(
+                        icon: Icons.lock_open_rounded,
+                        color: ArcadeColors.cyan,
+                        title: 'Abrir caixa',
+                        subtitle: 'Defina o fundo de troco deste turno.'),
+                    const SizedBox(height: 22),
+                    TextField(
+                        controller: amount,
+                        autofocus: true,
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        decoration: const InputDecoration(
+                            labelText: 'Fundo de troco', prefixText: 'R\$ ')),
+                    const SizedBox(height: 20),
+                    _CashDialogActions(
+                        cancelLabel: 'Cancelar',
+                        confirmLabel: 'Abrir turno',
+                        onCancel: () => Navigator.pop(dialogContext),
+                        onConfirm: () =>
+                            Navigator.pop(dialogContext, _parse(amount.text)))
+                  ]),
+                ),
+              ),
+            ));
     if (value == null) return;
     try {
       await app.openCash(value);
@@ -305,45 +309,63 @@ class CashScreen extends StatelessWidget {
       {required bool withdrawal}) async {
     final amount = TextEditingController();
     final note = TextEditingController();
-    final result = await showModalBottomSheet<({double amount, String note})>(
-        isScrollControlled: true,
-        useSafeArea: true,
-        backgroundColor: arcadeSurfaceColor(context),
+    final result = await showDialog<({double amount, String note})>(
         context: context,
-        builder: (context) => AlertDialog(
-                backgroundColor: arcadeSurfaceColor(context),
-                title: Text(
-                    withdrawal ? 'Registrar sangria' : 'Registrar suprimento',
-                    style: const TextStyle(fontFamily: 'SpaceGrotesk')),
-                content: Column(mainAxisSize: MainAxisSize.min, children: [
-                  TextField(
-                      controller: amount,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
-                          labelText: 'Valor', prefixText: 'R\$ ')),
-                  const SizedBox(height: 12),
-                  TextField(
+        builder: (dialogContext) => Dialog(
+              backgroundColor: arcadeSurfaceColor(dialogContext),
+              insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 470),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 22, 24, 18),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    _CashDialogHeader(
+                        icon: withdrawal
+                            ? Icons.south_west_rounded
+                            : Icons.north_east_rounded,
+                        color:
+                            withdrawal ? ArcadeColors.red : ArcadeColors.lime,
+                        title: withdrawal
+                            ? 'Registrar sangria'
+                            : 'Registrar suprimento',
+                        subtitle: withdrawal
+                            ? 'Registre a retirada e mantenha o motivo documentado.'
+                            : 'Adicione dinheiro ao fundo de troco com uma justificativa.'),
+                    const SizedBox(height: 22),
+                    TextField(
+                        controller: amount,
+                        autofocus: true,
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        decoration: const InputDecoration(
+                            labelText: 'Valor da operação',
+                            prefixText: 'R\$ ')),
+                    const SizedBox(height: 14),
+                    TextField(
                       controller: note,
                       minLines: 2,
                       maxLines: 3,
                       decoration: const InputDecoration(
-                          labelText: 'Justificativa obrigatória',
+                          labelText: 'Justificativa',
                           hintText:
-                              'Ex.: reforço de troco / retirada para cofre'))
-                ]),
-                actions: [
-                  TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancelar')),
-                  NeonButton(
-                      label: withdrawal
-                          ? 'CONFIRMAR SANGRIA'
-                          : 'CONFIRMAR SUPRIMENTO',
-                      danger: withdrawal,
-                      onPressed: () => Navigator.pop(context,
-                          (amount: _parse(amount.text), note: note.text)))
-                ]));
+                              'Ex.: reforço de troco ou retirada para cofre'),
+                    ),
+                    const SizedBox(height: 20),
+                    _CashDialogActions(
+                        cancelLabel: 'Cancelar',
+                        confirmLabel: withdrawal
+                            ? 'Confirmar sangria'
+                            : 'Confirmar suprimento',
+                        danger: withdrawal,
+                        onCancel: () => Navigator.pop(dialogContext),
+                        onConfirm: () => Navigator.pop(dialogContext,
+                            (amount: _parse(amount.text), note: note.text)))
+                  ]),
+                ),
+              ),
+            ));
     if (result == null) return;
     try {
       await app.recordCashAdjustment(
@@ -378,6 +400,86 @@ class CashScreen extends StatelessWidget {
           content: Text(error.toString().replaceFirst('Bad state: ', '')),
           backgroundColor: Theme.of(context).colorScheme.error));
   double _parse(String value) => parseMoney(value) ?? double.nan;
+}
+
+class _CashDialogHeader extends StatelessWidget {
+  const _CashDialogHeader({
+    required this.icon,
+    required this.color,
+    required this.title,
+    required this.subtitle,
+  });
+  final IconData icon;
+  final Color color;
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final displayColor = arcadeSemanticColor(context, color);
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(
+          width: 44,
+          height: 44,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: displayColor.withValues(alpha: .12),
+              borderRadius: BorderRadius.circular(13)),
+          child: Icon(icon, color: displayColor, size: 22)),
+      const SizedBox(width: 13),
+      Expanded(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(title,
+            style: const TextStyle(
+                fontFamily: 'SpaceGrotesk',
+                fontSize: 19,
+                fontWeight: FontWeight.w700)),
+        const SizedBox(height: 4),
+        Text(subtitle,
+            style: TextStyle(
+                color: arcadeSemanticColor(context, ArcadeColors.muted),
+                fontSize: 11,
+                height: 1.35)),
+      ]))
+    ]);
+  }
+}
+
+class _CashDialogActions extends StatelessWidget {
+  const _CashDialogActions({
+    required this.cancelLabel,
+    required this.confirmLabel,
+    required this.onCancel,
+    required this.onConfirm,
+    this.danger = false,
+  });
+  final String cancelLabel;
+  final String confirmLabel;
+  final VoidCallback onCancel;
+  final VoidCallback onConfirm;
+  final bool danger;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = arcadeSemanticColor(
+        context, danger ? ArcadeColors.red : ArcadeColors.cyan);
+    return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+      TextButton(onPressed: onCancel, child: Text(cancelLabel)),
+      const SizedBox(width: 10),
+      FilledButton.icon(
+          onPressed: onConfirm,
+          icon: Icon(danger ? Icons.check_rounded : Icons.arrow_forward_rounded,
+              size: 17),
+          label: Text(confirmLabel),
+          style: FilledButton.styleFrom(
+              backgroundColor: color,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(11))))
+    ]);
+  }
 }
 
 class _Info extends StatelessWidget {

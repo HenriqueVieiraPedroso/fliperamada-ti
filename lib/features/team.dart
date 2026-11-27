@@ -1260,21 +1260,32 @@ class _ShiftPill extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) => Container(
-        margin: const EdgeInsets.all(4),
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: .15),
-          borderRadius: BorderRadius.circular(7),
-          border: Border.all(color: color.withValues(alpha: .3)),
-        ),
-        child: Text(
-          name.split(' ').first,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-          style:
-              TextStyle(color: color, fontSize: 8, fontWeight: FontWeight.w800),
-        ),
-      );
+  Widget build(BuildContext context) {
+    final displayColor = arcadeSemanticColor(context, color);
+    final foreground = displayColor.computeLuminance() > .55
+        ? ArcadeColors.lightInk
+        : Colors.white;
+    return Container(
+      margin: const EdgeInsets.all(4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 9),
+      decoration: BoxDecoration(
+        color: displayColor,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+              color: displayColor.withValues(alpha: .18),
+              blurRadius: 7,
+              offset: const Offset(0, 2))
+        ],
+      ),
+      child: Text(
+        name.split(' ').first,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: foreground, fontSize: 10, fontWeight: FontWeight.w800),
+      ),
+    );
+  }
 }

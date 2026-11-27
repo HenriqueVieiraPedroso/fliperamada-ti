@@ -324,23 +324,20 @@ class NeonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final light = Theme.of(context).brightness == Brightness.light;
-    final colors = danger
-        ? (light
-            ? const [Color(0xFFB42318), Color(0xFF912018)]
-            : const [ArcadeColors.red, Color(0xFFFF2E68)])
-        : light
-            ? const [Color(0xFF1769E0), Color(0xFF0B5BD3)]
-            : const [ArcadeColors.cyan, ArcadeColors.purple];
+    final buttonColor = arcadeSemanticColor(
+        context, danger ? ArcadeColors.red : ArcadeColors.cyan);
+    final foreground = buttonColor.computeLuminance() > .55
+        ? ArcadeColors.lightInk
+        : Colors.white;
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: colors),
+        color: buttonColor.withValues(alpha: onPressed == null ? .42 : 1),
         borderRadius: BorderRadius.circular(13),
         boxShadow: [
           BoxShadow(
-              color: colors.first.withValues(alpha: .19),
-              blurRadius: 22,
-              offset: const Offset(0, 5))
+              color: buttonColor.withValues(alpha: .16),
+              blurRadius: 12,
+              offset: const Offset(0, 4))
         ],
       ),
       child: Material(
@@ -361,12 +358,12 @@ class NeonButton extends StatelessWidget {
                 const SizedBox(width: 9)
               ],
               if (!busy && icon != null) ...[
-                Icon(icon, size: 17, color: Colors.white),
+                Icon(icon, size: 17, color: foreground),
                 const SizedBox(width: 8)
               ],
               Text(label,
                   style: TextStyle(
-                      color: Colors.white,
+                      color: foreground,
                       fontWeight: FontWeight.w800,
                       fontSize: compact ? 12 : 13,
                       letterSpacing: .35)),
