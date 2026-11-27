@@ -678,66 +678,93 @@ class _MobileNav extends StatelessWidget {
     final light = Theme.of(context).brightness == Brightness.light;
     return Container(
         decoration: BoxDecoration(
-            color: light
-                ? const Color(0xFF172033)
-                : Theme.of(context).colorScheme.surface,
+            color: light ? Colors.white : Theme.of(context).colorScheme.surface,
             border: Border(
                 top: BorderSide(
                     color: light
-                        ? const Color(0xFF2D3A50)
+                        ? ArcadeColors.lightBorder
                         : ArcadeColors.divider))),
         child: SafeArea(
             top: false,
-            child: NavigationBar(
-              height: 65,
-              backgroundColor: light
-                  ? const Color(0xFF172033)
-                  : Theme.of(context).colorScheme.surface,
-              surfaceTintColor: Colors.transparent,
-              indicatorColor: ArcadeColors.cyan.withValues(alpha: .1),
-              selectedIndex:
-                  selectedInExtra ? 4 : primary.indexOf(selected).clamp(0, 3),
-              onDestinationSelected: (index) {
-                if (index < primary.length) {
-                  onSelect(primary[index]);
-                  return;
-                }
-                showModalBottomSheet<void>(
-                    context: context,
-                    backgroundColor: Theme.of(context).colorScheme.surface,
-                    builder: (context) => SafeArea(
-                        child: Padding(
-                            padding: const EdgeInsets.all(18),
-                            child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: extra
-                                    .map((section) => ListTile(
-                                        leading: Icon(section.icon,
-                                            color: section == selected
-                                                ? ArcadeColors.cyan
-                                                : ArcadeColors.muted),
-                                        title: Text(section.label),
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                          onSelect(section);
-                                        }))
-                                    .toList()))));
-              },
-              destinations: [
-                for (final section in primary)
-                  NavigationDestination(
-                      icon: Icon(section.icon, size: 19),
-                      selectedIcon: Icon(section.icon,
-                          size: 19, color: ArcadeColors.cyan),
-                      label: section.label),
-                if (extra.isNotEmpty)
-                  NavigationDestination(
-                      icon: Icon(Icons.more_horiz_rounded,
-                          color: selectedInExtra
-                              ? ArcadeColors.cyan
-                              : ArcadeColors.muted),
-                      label: 'Mais'),
-              ],
-            )));
+            child: NavigationBarTheme(
+                data: NavigationBarThemeData(
+                  backgroundColor: light
+                      ? Colors.white
+                      : Theme.of(context).colorScheme.surface,
+                  indicatorColor: light
+                      ? ArcadeColors.cyan
+                      : ArcadeColors.cyan.withValues(alpha: .1),
+                  labelTextStyle: WidgetStateProperty.resolveWith((states) =>
+                      TextStyle(
+                          color: light
+                              ? ArcadeColors.lightInk
+                              : Theme.of(context).colorScheme.onSurface,
+                          fontSize: 10,
+                          fontWeight: states.contains(WidgetState.selected)
+                              ? FontWeight.w800
+                              : FontWeight.w600)),
+                  iconTheme:
+                      WidgetStateProperty.resolveWith((states) => IconThemeData(
+                          color: light
+                              ? states.contains(WidgetState.selected)
+                                  ? Colors.white
+                                  : ArcadeColors.lightMuted
+                              : states.contains(WidgetState.selected)
+                                  ? ArcadeColors.cyan
+                                  : ArcadeColors.muted,
+                          size: 19)),
+                ),
+                child: NavigationBar(
+                  height: 65,
+                  backgroundColor: light
+                      ? Colors.white
+                      : Theme.of(context).colorScheme.surface,
+                  surfaceTintColor: Colors.transparent,
+                  indicatorColor: ArcadeColors.cyan.withValues(alpha: .1),
+                  selectedIndex: selectedInExtra
+                      ? 4
+                      : primary.indexOf(selected).clamp(0, 3),
+                  onDestinationSelected: (index) {
+                    if (index < primary.length) {
+                      onSelect(primary[index]);
+                      return;
+                    }
+                    showModalBottomSheet<void>(
+                        context: context,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        builder: (context) => SafeArea(
+                            child: Padding(
+                                padding: const EdgeInsets.all(18),
+                                child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: extra
+                                        .map((section) => ListTile(
+                                            leading: Icon(section.icon,
+                                                color: section == selected
+                                                    ? ArcadeColors.cyan
+                                                    : ArcadeColors.muted),
+                                            title: Text(section.label),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              onSelect(section);
+                                            }))
+                                        .toList()))));
+                  },
+                  destinations: [
+                    for (final section in primary)
+                      NavigationDestination(
+                          icon: Icon(section.icon, size: 19),
+                          selectedIcon:
+                              Icon(section.icon, size: 19, color: Colors.white),
+                          label: section.label),
+                    if (extra.isNotEmpty)
+                      NavigationDestination(
+                          icon: Icon(Icons.more_horiz_rounded,
+                              color: selectedInExtra
+                                  ? ArcadeColors.cyan
+                                  : ArcadeColors.muted),
+                          label: 'Mais'),
+                  ],
+                ))));
   }
 }
