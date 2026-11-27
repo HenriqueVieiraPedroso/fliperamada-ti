@@ -645,7 +645,7 @@ class _MachineCounter extends StatelessWidget {
               CircularProgressIndicator(
                   value: total == 0 ? 0 : count / total,
                   strokeWidth: 5,
-                  backgroundColor: Colors.white.withValues(alpha: .065),
+                  backgroundColor: arcadeSoftSurfaceColor(context),
                   valueColor: AlwaysStoppedAnimation(color)),
               Text('$count',
                   style: TextStyle(

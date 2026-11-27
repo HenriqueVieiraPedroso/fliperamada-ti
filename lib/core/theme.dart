@@ -6,25 +6,27 @@ class ArcadeColors {
   static const bg = Color(0xFF0A0B1E);
   static const bg2 = Color(0xFF140B2E);
   static const surface = Color(0xFF14152C);
-  static const cyan = Color(0xFF00F0FF);
+  static const cyan = Color(0xFF0E7490);
   static const magenta = Color(0xFFFF2E93);
-  static const lime = Color(0xFFB6FF3B);
+  static const lime = Color(0xFF15803D);
   static const yellow = Color(0xFFFFD60A);
   static const red = Color(0xFFFF4D4D);
   static const purple = Color(0xFF8B5CF6);
   static const muted = Color(0xFF667085);
   static const divider = Color(0x3D667085);
   static const ink = Color(0xFFF5F6FF);
-  static const lightInk = Color(0xFF0B1220);
-  static const lightMuted = Color(0xFF344054);
-  static const lightBorder = Color(0xFF667085);
-  static const lightLime = Color(0xFF166534);
+  static const lightInk = Color(0xFF07111F);
+  static const lightMuted = Color(0xFF1F2937);
+  static const lightBorder = Color(0xFF7A8CA3);
+  static const lightPanel = Color(0xFFFFFFFF);
+  static const lightSoft = Color(0xFFD4DEE9);
+  static const lightLime = Color(0xFF15803D);
 }
 
 Color arcadeSemanticColor(BuildContext context, Color color) {
   if (Theme.of(context).brightness != Brightness.light) return color;
-  if (color == ArcadeColors.cyan) return const Color(0xFF005A6B);
-  if (color == ArcadeColors.magenta) return const Color(0xFFA50F56);
+  if (color == ArcadeColors.cyan) return const Color(0xFF0E7490);
+  if (color == ArcadeColors.magenta) return const Color(0xFF8A0644);
   if (color == ArcadeColors.lime) return ArcadeColors.lightLime;
   if (color == ArcadeColors.yellow) return const Color(0xFF8A4B00);
   if (color == ArcadeColors.red) return const Color(0xFFB42318);
@@ -35,12 +37,12 @@ Color arcadeSemanticColor(BuildContext context, Color color) {
 
 Color arcadeSurfaceColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.light
-        ? Theme.of(context).colorScheme.surface
+        ? ArcadeColors.lightPanel
         : const Color(0xFF15162E);
 
 Color arcadeSoftSurfaceColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.light
-        ? const Color(0xFFF1F5F9)
+        ? ArcadeColors.lightSoft
         : Colors.white.withValues(alpha: .04);
 
 Color arcadeBorderColor(BuildContext context) =>
@@ -123,15 +125,15 @@ class ArcadeTheme {
   static ThemeData get light => ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
-        scaffoldBackgroundColor: const Color(0xFFE9EEF5),
+        scaffoldBackgroundColor: const Color(0xFFC4D1E0),
         colorScheme: const ColorScheme.light(
-          primary: Color(0xFF004B59),
+          primary: Color(0xFF003B49),
           onPrimary: Colors.white,
-          secondary: Color(0xFF8A0B49),
+          secondary: Color(0xFF7A063E),
           onSecondary: Colors.white,
-          tertiary: Color(0xFF275500),
+          tertiary: Color(0xFF14532D),
           onTertiary: Colors.white,
-          surface: Colors.white,
+          surface: ArcadeColors.lightPanel,
           onSurface: ArcadeColors.lightInk,
           error: Color(0xFFB42318),
           onError: Colors.white,
@@ -183,7 +185,7 @@ class ArcadeTheme {
                   color: ArcadeColors.lightBorder, width: 1.4)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Color(0xFF004B59), width: 2)),
+              borderSide: const BorderSide(color: Color(0xFF003B49), width: 2)),
           errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide:
@@ -253,28 +255,38 @@ class _GlassCardState extends State<GlassCard> {
         decoration: BoxDecoration(
           borderRadius: radius,
           border: Border.all(
+              width: light ? 1.5 : 1,
               color: light
-                  ? const Color(0xFFD0D5DD)
+                  ? ArcadeColors.lightBorder
                   : (widget.glow ?? Colors.white).withValues(
                       alpha: widget.glow == null
                           ? (_hovered ? .14 : .075)
                           : (_hovered ? .32 : .22))),
-          boxShadow: widget.glow == null && !_hovered
-              ? const []
-              : [
+          boxShadow: light
+              ? [
                   BoxShadow(
-                      color: glowColor.withValues(alpha: _hovered ? .11 : .07),
-                      blurRadius: _hovered ? 34 : 28,
-                      spreadRadius: -5)
-                ],
+                      color: const Color(0xFF344054).withValues(alpha: .16),
+                      blurRadius: 16,
+                      offset: const Offset(0, 6))
+                ]
+              : widget.glow == null && !_hovered
+                  ? const []
+                  : [
+                      BoxShadow(
+                          color:
+                              glowColor.withValues(alpha: _hovered ? .11 : .07),
+                          blurRadius: _hovered ? 34 : 28,
+                          spreadRadius: -5)
+                    ],
         ),
         child: ClipRRect(
           borderRadius: radius,
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Material(
-              color:
-                  light ? Colors.white : Colors.white.withValues(alpha: .045),
+              color: light
+                  ? ArcadeColors.lightPanel
+                  : Colors.white.withValues(alpha: .045),
               child: InkWell(
                 onTap: widget.onTap,
                 onHover: (hovering) {

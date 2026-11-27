@@ -32,7 +32,7 @@ class _MachinesScreenState extends State<MachinesScreen> {
               subtitle: 'Cada gabinete conta uma parte da história da arena.',
               trailing: DropdownButton<String>(
                 value: _filter,
-                dropdownColor: const Color(0xFF17182F),
+                dropdownColor: arcadeSurfaceColor(context),
                 underline: const SizedBox.shrink(),
                 items: ['Todas', 'Ativa', 'Em Manutenção', 'Inativa']
                     .map((value) => DropdownMenuItem(
@@ -80,7 +80,7 @@ class _MachinesScreenState extends State<MachinesScreen> {
     await showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
-        backgroundColor: const Color(0xFF111329),
+        backgroundColor: arcadeSurfaceColor(context),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
         builder: (context) => Padding(
@@ -188,7 +188,7 @@ class _MachinesScreenState extends State<MachinesScreen> {
     final submit = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-                backgroundColor: const Color(0xFF17182F),
+                backgroundColor: arcadeSurfaceColor(context),
                 title: const Text('Saída de peça',
                     style: TextStyle(fontFamily: 'SpaceGrotesk')),
                 content: Column(
@@ -257,7 +257,7 @@ class _MachinesScreenState extends State<MachinesScreen> {
   void _message(BuildContext context, Object error) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(error.toString().replaceFirst('Bad state: ', '')),
-          backgroundColor: const Color(0xFF401B2A)));
+          backgroundColor: Theme.of(context).colorScheme.error));
 }
 
 class _MachineCard extends StatelessWidget {
@@ -285,7 +285,7 @@ class _MachineCard extends StatelessWidget {
                   height: 58,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      color: const Color(0xFF111329),
+                      color: arcadeSurfaceColor(context),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                           color: machine.statusColor.withValues(alpha: .3),

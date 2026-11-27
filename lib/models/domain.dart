@@ -162,7 +162,7 @@ class ArcadeMachine {
       );
 
   Color get statusColor => switch (status) {
-        MachineStatus.active => const Color(0xFFB6FF3B),
+        MachineStatus.active => const Color(0xFF15803D),
         MachineStatus.maintenance => const Color(0xFFFFD60A),
         MachineStatus.inactive => const Color(0xFF72748A),
       };

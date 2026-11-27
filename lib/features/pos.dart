@@ -22,7 +22,7 @@ class _PosScreenState extends State<PosScreen> {
   void _message(String text, {bool error = false}) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(text),
-          backgroundColor: error ? const Color(0xFF401B2A) : null));
+          backgroundColor: error ? Theme.of(context).colorScheme.error : null));
 
   @override
   Widget build(BuildContext context) =>
@@ -82,7 +82,7 @@ class _PosScreenState extends State<PosScreen> {
                     selected: _category == category,
                     showCheckmark: false,
                     onSelected: (_) => setState(() => _category = category),
-                    backgroundColor: const Color(0xFF13152A),
+                    backgroundColor: arcadeSurfaceColor(context),
                     selectedColor: ArcadeColors.cyan.withValues(alpha: .14),
                     side: BorderSide(
                       color: _category == category
@@ -273,7 +273,7 @@ class _PosScreenState extends State<PosScreen> {
     final value = await showDialog<double>(
         context: context,
         builder: (context) => AlertDialog(
-                backgroundColor: const Color(0xFF17182F),
+                backgroundColor: arcadeSurfaceColor(context),
                 title: const Text('Abrir caixa',
                     style: TextStyle(fontFamily: 'SpaceGrotesk')),
                 content: Column(
@@ -314,7 +314,7 @@ class _PosScreenState extends State<PosScreen> {
     final value = await showDialog<double>(
         context: context,
         builder: (context) => AlertDialog(
-                backgroundColor: const Color(0xFF17182F),
+                backgroundColor: arcadeSurfaceColor(context),
                 title: const Text('Desconto autorizado',
                     style: TextStyle(fontFamily: 'SpaceGrotesk')),
                 content: TextField(
@@ -405,7 +405,7 @@ class _ProductTile extends StatelessWidget {
                         fontWeight: FontWeight.w700))),
             Material(
                 color: unavailable
-                    ? Colors.white.withValues(alpha: .04)
+                    ? arcadeSoftSurfaceColor(context)
                     : ArcadeColors.cyan.withValues(alpha: .13),
                 borderRadius: BorderRadius.circular(10),
                 child: InkWell(
@@ -438,7 +438,7 @@ class _QtyButton extends StatelessWidget {
           width: 23,
           height: 23,
           decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: .055),
+              color: arcadeSoftSurfaceColor(context),
               borderRadius: BorderRadius.circular(7)),
           child: Icon(icon, color: ArcadeColors.cyan, size: 14)));
 }
@@ -533,7 +533,7 @@ class _PaymentDialogState extends State<_PaymentDialog> {
 
   @override
   Widget build(BuildContext context) => Dialog(
-        backgroundColor: const Color(0xFF15162E),
+        backgroundColor: arcadeSurfaceColor(context),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(22),
           side: BorderSide(color: ArcadeColors.cyan.withValues(alpha: .22)),
@@ -813,7 +813,7 @@ class _SaleSuccessDialog extends StatelessWidget {
   const _SaleSuccessDialog();
   @override
   Widget build(BuildContext context) => Dialog(
-      backgroundColor: const Color(0xFF111329),
+      backgroundColor: arcadeSurfaceColor(context),
       child: Stack(alignment: Alignment.center, children: [
         SizedBox(
             height: 270,

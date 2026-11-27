@@ -189,7 +189,7 @@ class SegmentedPills extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: .045),
+            color: arcadeSoftSurfaceColor(context),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
                 color: Theme.of(context).brightness == Brightness.light
@@ -208,7 +208,8 @@ class SegmentedPills extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
                   decoration: BoxDecoration(
                       color: selected
-                          ? ArcadeColors.cyan.withValues(alpha: .13)
+                          ? arcadeSemanticColor(context, ArcadeColors.cyan)
+                              .withValues(alpha: .16)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(9)),
                   child: Text(item,

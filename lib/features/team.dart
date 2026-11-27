@@ -161,116 +161,122 @@ class _TeamScreenState extends State<TeamScreen>
               scrollDirection: Axis.horizontal,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(minWidth: 1080),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const SizedBox(width: 168),
-                        ...days.map((day) => Expanded(
-                              child: Center(
-                                child: Text(
-                                  day,
-                                  style: TextStyle(
-                                    color: arcadeSemanticColor(
-                                        context, ArcadeColors.muted),
-                                    fontSize: 10,
-                                    letterSpacing: 1,
-                                    fontWeight: FontWeight.w800,
+                child: SizedBox(
+                  width: 1080,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const SizedBox(width: 190),
+                          ...days.map((day) => SizedBox(
+                                width: 127,
+                                child: Center(
+                                  child: Text(
+                                    day,
+                                    style: TextStyle(
+                                      color: arcadeSemanticColor(
+                                          context, ArcadeColors.muted),
+                                      fontSize: 10,
+                                      letterSpacing: 1,
+                                      fontWeight: FontWeight.w800,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )),
-                      ],
-                    ),
-                    const SizedBox(height: 9),
-                    ...List.generate(
-                      3,
-                      (shiftIndex) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: SizedBox(
-                          height: 104,
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 168,
-                                child: Row(
-                                  children: [
-                                    Icon(shiftIcons[shiftIndex],
-                                        color: shiftColors[shiftIndex],
-                                        size: 16),
-                                    const SizedBox(width: 8),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(shiftNames[shiftIndex],
-                                            style: const TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w800)),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ...List.generate(7, (weekday) {
-                                final shifts = app.workShifts
-                                    .where((shift) =>
-                                        shift.weekday == weekday &&
-                                        shift.shiftIndex == shiftIndex)
-                                    .toList();
-                                return Expanded(
-                                  child: _ScheduleCell(
-                                    shifts: shifts,
-                                    employees: app.team,
-                                    weekday: weekday,
-                                    shiftIndex: shiftIndex,
-                                    color: shiftColors[shiftIndex],
-                                    canManage: app.role.canManage,
-                                    onMove: (id) => _moveShift(
-                                      app,
-                                      id,
-                                      weekday,
-                                      shiftIndex,
-                                    ),
-                                    onAdd: () => _assignShift(
-                                      app,
-                                      weekday,
-                                      shiftIndex,
-                                    ),
-                                    onDropAllowed: (id) {
-                                      final atDestination = app.workShifts
-                                          .where((shift) =>
-                                              shift.weekday == weekday &&
-                                              shift.shiftIndex == shiftIndex &&
-                                              shift.id != id)
-                                          .isNotEmpty;
-                                      return !atDestination;
-                                    },
+                              )),
+                        ],
+                      ),
+                      const SizedBox(height: 9),
+                      ...List.generate(
+                        3,
+                        (shiftIndex) => Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: SizedBox(
+                            height: 116,
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 190,
+                                  child: Row(
+                                    children: [
+                                      Icon(shiftIcons[shiftIndex],
+                                          color: shiftColors[shiftIndex],
+                                          size: 16),
+                                      const SizedBox(width: 8),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(shiftNames[shiftIndex],
+                                              style: const TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w800)),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                );
-                              }),
-                            ],
+                                ),
+                                ...List.generate(7, (weekday) {
+                                  final shifts = app.workShifts
+                                      .where((shift) =>
+                                          shift.weekday == weekday &&
+                                          shift.shiftIndex == shiftIndex)
+                                      .toList();
+                                  return SizedBox(
+                                    width: 127,
+                                    child: _ScheduleCell(
+                                      shifts: shifts,
+                                      employees: app.team,
+                                      weekday: weekday,
+                                      shiftIndex: shiftIndex,
+                                      color: shiftColors[shiftIndex],
+                                      canManage: app.role.canManage,
+                                      onMove: (id) => _moveShift(
+                                        app,
+                                        id,
+                                        weekday,
+                                        shiftIndex,
+                                      ),
+                                      onAdd: () => _assignShift(
+                                        app,
+                                        weekday,
+                                        shiftIndex,
+                                      ),
+                                      onDropAllowed: (id) {
+                                        final atDestination = app.workShifts
+                                            .where((shift) =>
+                                                shift.weekday == weekday &&
+                                                shift.shiftIndex ==
+                                                    shiftIndex &&
+                                                shift.id != id)
+                                            .isNotEmpty;
+                                        return !atDestination;
+                                      },
+                                    ),
+                                  );
+                                }),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    if (app.workShifts.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Text(
-                          app.role.canManage
-                              ? 'Ainda não há blocos. Use + em uma célula vazia para atribuir um colaborador.'
-                              : 'Ainda não há blocos de escala cadastrados.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: arcadeSemanticColor(
-                                  context, ArcadeColors.muted),
-                              fontSize: 11),
+                      if (app.workShifts.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            app.role.canManage
+                                ? 'Ainda não há blocos. Use + em uma célula vazia para atribuir um colaborador.'
+                                : 'Ainda não há blocos de escala cadastrados.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: arcadeSemanticColor(
+                                    context, ArcadeColors.muted),
+                                fontSize: 11),
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -650,7 +656,7 @@ class _TeamScreenState extends State<TeamScreen>
   void _message(BuildContext context, Object error) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(error.toString().replaceFirst('Bad state: ', '')),
-        backgroundColor: const Color(0xFF401B2A),
+        backgroundColor: Theme.of(context).colorScheme.error,
       ));
 }
 

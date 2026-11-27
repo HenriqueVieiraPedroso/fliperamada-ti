@@ -308,6 +308,7 @@ class CashScreen extends StatelessWidget {
     final result = await showModalBottomSheet<({double amount, String note})>(
         isScrollControlled: true,
         useSafeArea: true,
+        backgroundColor: arcadeSurfaceColor(context),
         context: context,
         builder: (context) => AlertDialog(
                 backgroundColor: arcadeSurfaceColor(context),
@@ -375,7 +376,7 @@ class CashScreen extends StatelessWidget {
   void _error(BuildContext context, Object error) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(error.toString().replaceFirst('Bad state: ', '')),
-          backgroundColor: const Color(0xFF8B1E2D)));
+          backgroundColor: Theme.of(context).colorScheme.error));
   double _parse(String value) => parseMoney(value) ?? double.nan;
 }
 
@@ -399,7 +400,7 @@ class _Info extends StatelessWidget {
                 fontFamily: 'SpaceGrotesk',
                 fontSize: 13,
                 color: highlight == null
-                    ? Theme.of(context).colorScheme.onSurface
+                    ? ArcadeColors.lightInk
                     : arcadeSemanticColor(context, highlight!),
                 fontWeight: FontWeight.w700))
       ]);

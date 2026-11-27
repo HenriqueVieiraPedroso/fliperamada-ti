@@ -64,7 +64,7 @@ class _InventoryScreenState extends State<InventoryScreen>
                 const SizedBox(height: 17),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: .025),
+                    color: arcadeSoftSurfaceColor(context),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: ArcadeColors.divider),
                   ),
@@ -125,7 +125,7 @@ class _InventoryScreenState extends State<InventoryScreen>
               );
               final category = DropdownButton<String>(
                 value: _category,
-                dropdownColor: const Color(0xFF17182F),
+                dropdownColor: arcadeSurfaceColor(context),
                 underline: const SizedBox.shrink(),
                 items: ['Todas', 'Fichas', 'Bebidas', 'Snacks']
                     .map((value) => DropdownMenuItem(
@@ -262,7 +262,7 @@ class _InventoryScreenState extends State<InventoryScreen>
                                         minHeight: 6,
                                         color: color,
                                         backgroundColor:
-                                            Colors.white.withValues(alpha: .06),
+                                            arcadeSoftSurfaceColor(context),
                                         borderRadius: BorderRadius.circular(9),
                                       ),
                                       const SizedBox(height: 4),
@@ -628,7 +628,7 @@ class _InventoryScreenState extends State<InventoryScreen>
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      backgroundColor: const Color(0xFF14152C),
+      backgroundColor: arcadeSurfaceColor(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -654,7 +654,7 @@ class _InventoryScreenState extends State<InventoryScreen>
   void _message(BuildContext context, Object error) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(error.toString().replaceFirst('Bad state: ', '')),
-        backgroundColor: const Color(0xFF401B2A),
+        backgroundColor: Theme.of(context).colorScheme.error,
       ));
 }
 
@@ -752,7 +752,7 @@ class _StockReceiptFormState extends State<_StockReceiptForm> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 820),
             child: Material(
-              color: const Color(0xFF14152C),
+              color: arcadeSurfaceColor(context),
               child: Column(
                 children: [
                   Padding(
@@ -883,7 +883,7 @@ class _StockReceiptFormState extends State<_StockReceiptForm> {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: .025),
+          color: arcadeSoftSurfaceColor(context),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: ArcadeColors.divider),
         ),
